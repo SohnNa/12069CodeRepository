@@ -19,11 +19,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 
-
-
-@TeleOp(name = "Teleop_V1")
+@TeleOp(name = "teleopV1")
 //@Disabled
-public class FieldCentricMecanumTeleOp extends LinearOpMode {
+public class teleopV1 extends LinearOpMode {
     
     DistanceSensor distance_1;
     @Override
@@ -36,11 +34,12 @@ public class FieldCentricMecanumTeleOp extends LinearOpMode {
         
         
         // THE DECLARING of the... MOTORS!!!!!
-        DcMotorEx front_left = hardwareMap.get(DeMotorEx.class,_left");
-        DcMotorEx back_left = hardwareMap.get(DeMotorEx.class,"back_left");
-        DcMotorEx front_right = hardwareMap.get(DeMotorEx.class,"front_right");
-        DcMotorEx back_right = hardwareMap.get(DeMotorEx.class,"back_right");
-      
+        DcMotorEx front_left = hardwareMap.get(DcMotorEx.class,"front_left");
+        DcMotorEx back_left = hardwareMap.get(DcMotorEx.class,"back_left");
+        DcMotorEx front_right = hardwareMap.get(DcMotorEx.class,"front_right");
+        DcMotorEx back_right = hardwareMap.get(DcMotorEx.class,"back_right");
+
+
         //Servo servo_intake = hardwareMap.servo.get("servo_intake");
         //distance_1 = hardwareMap.get(DistanceSensor.class, "distance_1");
 
@@ -70,7 +69,7 @@ public class FieldCentricMecanumTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x;
-            double rx = gamepad1.right_stick_x
+            double rx = gamepad1.right_stick_x;
             
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
            
