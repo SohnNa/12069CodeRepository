@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
+//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+//import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.config.Config;
 
 
 
@@ -28,7 +28,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class teleopV1 extends LinearOpMode {
     
 
-    dashboard = FtcDashboard.getInstance();
+    //dashboard = FtcDashboard.getInstance();
     DistanceSensor distance_1;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -51,8 +51,8 @@ public class teleopV1 extends LinearOpMode {
 
         
         // Reversing the motors.
-        //back_left.setDirection(DcMotorSimple.Direction.REVERSE);
-        //back_right.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         
 
         // Retrieve the IMU from the hardware map
@@ -100,7 +100,7 @@ public class teleopV1 extends LinearOpMode {
             
             
             // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-botHeading) + y * Math.sin(-botHeading);
+            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
             double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
             rotX = rotX * 1.1;  // Counteract imperfect strafing
