@@ -44,9 +44,9 @@ public class teleopV1 extends LinearOpMode {
         //distance_1 = hardwareMap.get(DistanceSensor.class, "distance_1");
 
         
-        // Reversing the motors. 
-        back_left.setDirection(DcMotorSimple.Direction.REVERSE);
-        back_right.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Reversing the motors.
+        //back_left.setDirection(DcMotorSimple.Direction.REVERSE);
+        //back_right.setDirection(DcMotorSimple.Direction.REVERSE);
         
 
         // Retrieve the IMU from the hardware map
