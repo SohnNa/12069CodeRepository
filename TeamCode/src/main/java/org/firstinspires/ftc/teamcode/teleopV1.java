@@ -17,12 +17,18 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+
 
 
 @TeleOp(name = "teleopV1")
 //@Disabled
 public class teleopV1 extends LinearOpMode {
     
+
+    dashboard = FtcDashboard.getInstance();
     DistanceSensor distance_1;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,10 +40,10 @@ public class teleopV1 extends LinearOpMode {
         
         
         // THE DECLARING of the... MOTORS!!!!!
-        DcMotorEx front_left = hardwareMap.get(DcMotorEx.class,"front_left");
-        DcMotorEx back_left = hardwareMap.get(DcMotorEx.class,"back_left");
-        DcMotorEx front_right = hardwareMap.get(DcMotorEx.class,"front_right");
-        DcMotorEx back_right = hardwareMap.get(DcMotorEx.class,"back_right");
+        DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
+        DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
+        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
+        DcMotorEx backRight = hardwareMap.get(DcMotorEx.class,"backRight");
 
 
         //Servo servo_intake = hardwareMap.servo.get("servo_intake");
@@ -94,7 +100,7 @@ public class teleopV1 extends LinearOpMode {
             
             
             // Rotate the movement direction counter to the bot's rotation
-            double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
+            double rotX = x * Math.cos(-botHeading) + y * Math.sin(-botHeading);
             double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
 
             rotX = rotX * 1.1;  // Counteract imperfect strafing
@@ -103,10 +109,10 @@ public class teleopV1 extends LinearOpMode {
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
             double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-            double front_left_Power = (rotY + rotX + rx) / denominator;
-            double back_left_Power = (rotY - rotX + rx) / denominator;
-            double front_right_Power = (rotY - rotX - rx) / denominator;
-            double back_right_Power = (rotY + rotX - rx) / denominator;
+            double frontLeftPower = (rotY + rotX + rx) / denominator;
+            double backLeftPower = (rotY - rotX + rx) / denominator;
+            double frontRightPower = (rotY - rotX - rx) / denominator;
+            double backRightPower = (rotY + rotX - rx) / denominator;
             
             
             
@@ -132,10 +138,10 @@ public class teleopV1 extends LinearOpMode {
             
             //Total power calculations. 
             
-            front_left.setVelocity(front_left_Power * 5000 * speed);
-            back_left.setVelocity(back_left_Power * 5000 * speed);
-            front_right.setVelocity(front_right_Power * 5000 * speed);
-            back_right.setVelocity(back_right_Power * 5000 * speed);
+            frontLeft.setVelocity(frontLeftPower * 5000 * speed);
+            backLeft.setVelocity(backLeftPower * 5000 * speed);
+            frontRight.setVelocity(frontRightPower * 5000 * speed);
+            backRight.setVelocity(backRightPower * 5000 * speed);
         }
     }
 }
