@@ -132,10 +132,10 @@ public class teleopV1 extends LinearOpMode {
             
             //Total power calculations. 
             
-            front_left.setVelocity(front_left_Power * 10000 * speed);
-            back_left.setVelocity(back_left_Power * 10000 * speed);
-            front_right.setVelocity(front_right_Power * 10000 * speed);
-            back_right.setVelocity(back_right_Power * 10000 * speed);
+            front_left.setVelocity(front_left_Power * 5000 * speed);
+            back_left.setVelocity(back_left_Power * 5000 * speed);
+            front_right.setVelocity(front_right_Power * 5000 * speed);
+            back_right.setVelocity(back_right_Power * 5000 * speed);
         }
     }
 }
