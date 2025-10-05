@@ -43,8 +43,10 @@ public class catapultTesting extends LinearOpMode {
 
         backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        if (isStopRequested()) return;
 
+        waitForStart();
+
+        if (isStopRequested()) return;
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
