@@ -36,12 +36,12 @@ public class catapultTesting extends LinearOpMode {
 
 
         // THE DECLARING of the... MOTOR!!!!
-        DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
+        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
 
         // Reversing the motors.
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
 
 
         waitForStart();
@@ -50,30 +50,34 @@ public class catapultTesting extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                backLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                backLeft.setTargetPosition(2000);
-                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backLeft.setPower(0.5);
+                frontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                frontRight.setTargetPosition(2000);
+                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontRight.setPower(0.5);
             }
 
             if (gamepad1.b) {
-                backLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                backLeft.setTargetPosition(-2000);
-                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                backLeft.setPower(0.5);
+                frontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                frontRight.setTargetPosition(-2000);
+                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frontRight.setPower(0.5);
 
+            }
+
+            if (gamepad1.y) {
+                frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             }
 
             if (gamepad2.a) {
-                backLeft.setVelocity(10000);
+                frontRight.setVelocity(10000);
             }
 
             if (gamepad2.b) {
-                backLeft.setVelocity(-10000);
+                frontRight.setVelocity(-10000);
             }
 
             if (gamepad2.y) {
-                backLeft.setVelocity(0);
+                frontRight.setVelocity(0);
             }
 
             telemetry.update();
