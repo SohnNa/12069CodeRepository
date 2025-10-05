@@ -47,7 +47,7 @@ public class catapultTesting extends LinearOpMode {
             if (gamepad1.a) {
                 backLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                 backLeft.setTargetPosition(1000);
-                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION););
+                backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 backLeft.setPower(0.5);
             }
 
@@ -59,6 +59,17 @@ public class catapultTesting extends LinearOpMode {
 
             }
 
+            if (gamepad2.a) {
+                backLeft.setVelocity(10000);
+            }
+
+            if (gamepad2.b) {
+                backLeft.setVelocity(-10000);
+            }
+
+            if (gamepad2.y) {
+                backLeft.setVelocity(0);
+            }
 
             telemetry.update();
             
