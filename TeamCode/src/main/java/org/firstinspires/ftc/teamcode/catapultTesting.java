@@ -33,13 +33,13 @@ public class catapultTesting extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-
+        double currentVelocity = 0.0;
 
         // THE DECLARING of the... MOTOR!!!!
-        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
+        DcMotorEx launcherOne = hardwareMap.get(DcMotorEx.class,"launcherOne");
 
         // Reversing the motors.
-        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        launcherOne.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
@@ -50,35 +50,41 @@ public class catapultTesting extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                frontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                frontRight.setTargetPosition(2000);
-                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                frontRight.setPower(0.5);
+                launcherOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                launcherOne.setTargetPosition(2000);
+                launcherOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                launcherOne.setPower(0.5);
             }
 
             if (gamepad1.b) {
-                frontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                frontRight.setTargetPosition(-2000);
-                frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                frontRight.setPower(0.5);
+                launcherOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+                launcherOne.setTargetPosition(-2000);
+                launcherOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                launcherOne.setPower(0.5);
 
             }
 
             if (gamepad1.y) {
-                frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+                launcherOne.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             }
 
             if (gamepad2.a) {
-                frontRight.setVelocity(10000);
+                launcherOne.setVelocity(15000);
             }
 
             if (gamepad2.b) {
-                frontRight.setVelocity(-10000);
+                launcherOne.setVelocity(-15000);
             }
 
             if (gamepad2.y) {
-                frontRight.setVelocity(0);
+                launcherOne.setVelocity(0);
             }
+
+            currentVelocity = launcherOne.getVelocity();
+
+            telemetry.addData("Current Velocity", currentVelocity);
+
+
 
             telemetry.update();
             
