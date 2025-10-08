@@ -24,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 
-@TeleOp(name = "catapultTesting")
+@TeleOp(name = "All Purpose Motor Testing")
 //@Disabled
 public class catapultTesting extends LinearOpMode {
 
@@ -51,14 +51,14 @@ public class catapultTesting extends LinearOpMode {
         while (opModeIsActive()) {
             if (gamepad1.a) {
                 launcherOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                launcherOne.setTargetPosition(2000);
+                launcherOne.setTargetPosition(150);
                 launcherOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 launcherOne.setPower(0.5);
             }
 
             if (gamepad1.b) {
                 launcherOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                launcherOne.setTargetPosition(-2000);
+                launcherOne.setTargetPosition(-150);
                 launcherOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 launcherOne.setPower(0.5);
 
