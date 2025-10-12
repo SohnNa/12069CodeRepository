@@ -70,7 +70,7 @@ public class intakeTesting extends LinearOpMode {
             }
 
             if (gamepad1.right_bumper) {
-                velocity = 1;
+                velocity = 15000;
             } else {
                 velocity = 0;
             }
