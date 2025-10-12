@@ -24,9 +24,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 
-@TeleOp(name = "All Purpose Motor Testing")
+@TeleOp(name = "Intake Testing")
 //@Disabled
-public class catapultTesting extends LinearOpMode {
+public class intakeTesting extends LinearOpMode {
 
 
     //dashboard = FtcDashboard.getInstance()
@@ -34,6 +34,10 @@ public class catapultTesting extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         double currentVelocity = 0.0;
+
+        double velocity = 0.0;
+
+        double gearChanger = 0.8;
 
         // THE DECLARING of the... MOTOR!!!!
         DcMotorEx launcherOne = hardwareMap.get(DcMotorEx.class,"launcherOne");
@@ -50,35 +54,31 @@ public class catapultTesting extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                launcherOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                launcherOne.setTargetPosition(150);
-                launcherOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                launcherOne.setPower(0.5);
+                gearChanger = 0.8;
             }
 
-            if (gamepad1.b) {
-                launcherOne.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                launcherOne.setTargetPosition(-150);
-                launcherOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                launcherOne.setPower(0.5);
-
+            else if (gamepad1.b) {
+                gearChanger = 0.6;
             }
 
-            if (gamepad1.y) {
-                launcherOne.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            else if (gamepad1.y) {
+                gearChanger = 0.4;
             }
 
-            if (gamepad2.a) {
-                launcherOne.setVelocity(15000);
+            else if (gamepad1.x) {
+                gearChanger = 0.2;
             }
 
-            if (gamepad2.b) {
-                launcherOne.setVelocity(-15000);
+            if (gamepad1.right_bumper) {
+                velocity = 1;
+            } else {
+                velocity = 0;
             }
 
-            if (gamepad2.y) {
-                launcherOne.setVelocity(0);
-            }
+
+
+
+            launcherOne.setVelocity(velocity * gearChanger);
 
             currentVelocity = launcherOne.getVelocity();
 
