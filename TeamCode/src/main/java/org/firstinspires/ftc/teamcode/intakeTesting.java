@@ -37,7 +37,7 @@ public class intakeTesting extends LinearOpMode {
 
         double velocity = 0.0;
 
-        double gearChanger = 0.8;
+        double gearChanger = 1;
 
         // THE DECLARING of the... MOTOR!!!!
         DcMotorEx launcherOne = hardwareMap.get(DcMotorEx.class,"launcherOne");
@@ -70,7 +70,7 @@ public class intakeTesting extends LinearOpMode {
             }
 
             if (gamepad1.right_bumper) {
-                velocity = 15000;
+                velocity = 15000 * gearChanger;
             } else {
                 velocity = 0;
             }
@@ -78,7 +78,7 @@ public class intakeTesting extends LinearOpMode {
 
 
 
-            launcherOne.setVelocity(velocity * gearChanger);
+            launcherOne.setVelocity(velocity);
 
             currentVelocity = launcherOne.getVelocity();
 
