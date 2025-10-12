@@ -54,31 +54,24 @@ public class intakeTesting extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.a) {
-                gearChanger = 0.8;
+                launcherOne.setVelocity(2680);
             }
-
             else if (gamepad1.b) {
-                gearChanger = 0.6;
+                launcherOne.setVelocity(2680 * 0.8);
             }
 
-            else if (gamepad1.y) {
-                gearChanger = 0.4;
+            if (gamepad1.y) {
+                launcherOne.setVelocity(2680 * 0.6);
             }
 
-            else if (gamepad1.x) {
-                gearChanger = 0.2;
-            }
-
-            if (gamepad1.right_bumper) {
-                velocity = 15000 * gearChanger;
-            } else {
-                velocity = 0;
+            if (gamepad1.x) {
+                launcherOne.setVelocity(2680 * 0.4);
             }
 
 
 
 
-            launcherOne.setVelocity(velocity);
+
 
             currentVelocity = launcherOne.getVelocity();
 

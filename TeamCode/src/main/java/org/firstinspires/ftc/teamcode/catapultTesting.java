@@ -35,11 +35,14 @@ public class catapultTesting extends LinearOpMode {
 
         double currentVelocity = 0.0;
 
+        double currentVelocity2 = 0.0;
+
         // THE DECLARING of the... MOTOR!!!!
         DcMotorEx launcherOne = hardwareMap.get(DcMotorEx.class,"launcherOne");
+        DcMotorEx launcherTwo = hardwareMap.get(DcMotorEx.class,"launcherTwo");
 
         // Reversing the motors.
-        launcherOne.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
 
@@ -70,21 +73,26 @@ public class catapultTesting extends LinearOpMode {
 
             if (gamepad2.a) {
                 launcherOne.setVelocity(15000);
+                launcherTwo.setVelocity(-15000);
             }
 
             if (gamepad2.b) {
                 launcherOne.setVelocity(-15000);
+                launcherTwo.setVelocity(15000);
             }
 
             if (gamepad2.y) {
                 launcherOne.setVelocity(0);
+                launcherTwo.setVelocity(0);
             }
 
             currentVelocity = launcherOne.getVelocity();
 
-            telemetry.addData("Current Velocity", currentVelocity);
+            currentVelocity2 = launcherTwo.getVelocity();
 
+            telemetry.addData("Motor 1 Velocity", currentVelocity);
 
+            telemetry.addData("Motor 2 Velocity", currentVelocity2);
 
             telemetry.update();
             
