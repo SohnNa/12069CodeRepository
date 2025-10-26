@@ -45,7 +45,7 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
 
   //On initilization the Driver Station will prompt for which OpMode should be run - Auto Blue, Auto Red, or TeleOp
     while (opModeInInit()) {
-      operationSelected = selectOperation(operationSelected, gamepad1.psWasPressed());
+      operationSelected = selectOperation(operationSelected, gamepad1.guide);
       telemetry.update();
     }
     waitForStart();
@@ -140,7 +140,7 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
    * The bumpers will activate the flywheel, Core Hex feeder, and servo to cycle a series of balls.
    */
   private void setFlywheelVelocity() {
-    if (gamepad1.options) {
+    if (gamepad1.back) {
       flywheel.setPower(-0.5);
     } else if (gamepad1.left_bumper) {
       FAR_POWER_AUTO();
@@ -273,4 +273,5 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
     }
   }
 }
+
 
