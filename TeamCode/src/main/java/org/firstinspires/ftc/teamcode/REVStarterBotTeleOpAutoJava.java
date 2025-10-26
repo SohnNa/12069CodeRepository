@@ -121,9 +121,9 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
    */
   private void manualCoreHexAndServoControl() {
     // Manual control for the Core Hex intake
-    if (gamepad1.cross) {
+    if (gamepad1.x) {
       coreHex.setPower(0.5);
-    } else if (gamepad1.triangle) {
+    } else if (gamepad1.y) {
       coreHex.setPower(-0.5);
     }
     // Manual control for the hopper's servo
@@ -146,9 +146,9 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
       FAR_POWER_AUTO();
     } else if (gamepad1.right_bumper) {
       BANK_SHOT_AUTO();
-    } else if (gamepad1.circle) {
+    } else if (gamepad1.b) {
       ((DcMotorEx) flywheel).setVelocity(bankVelocity);
-    } else if (gamepad1.square) {
+    } else if (gamepad1.a) {
       ((DcMotorEx) flywheel).setVelocity(maxVelocity);
     } else {
       ((DcMotorEx) flywheel).setVelocity(0);
@@ -273,3 +273,4 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
     }
   }
 }
+
