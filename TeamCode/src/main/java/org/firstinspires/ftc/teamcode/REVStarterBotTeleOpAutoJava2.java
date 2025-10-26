@@ -1,3 +1,10 @@
+/*
+This version of the starterBot code has been changed to allow for two drivers. Gamepad2 controls the movement of the robot and Gamepad 1 controls the launcher. 
+This might help drivers not have to learn as much at once. 
+
+*/
+
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Starter Bot 2 Drivers")
+@TeleOp(name = "StarterBot 2 Drivers")
 public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
 
   private DcMotor flywheel;
@@ -110,8 +117,8 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     float X;
     float Y;
 
-    X = gamepad1.right_stick_x;
-    Y = -gamepad1.left_stick_y;
+    X = gamepad2.right_stick_x;
+    Y = -gamepad2.left_stick_y;
     leftDrive.setPower(Y - X);
     rightDrive.setPower(Y + X);
   }
