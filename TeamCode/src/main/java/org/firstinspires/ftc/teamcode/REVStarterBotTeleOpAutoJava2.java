@@ -44,7 +44,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     
   // Establishing the direction and mode for the motors
     flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    flywheel.setDirection(DcMotor.Direction.REVERSE);
+    //flywheel.setDirection(DcMotor.Direction.REVERSE);
     coreHex.setDirection(DcMotor.Direction.REVERSE);
     leftDrive.setDirection(DcMotor.Direction.REVERSE);
     //Ensures the servo is active and ready
@@ -117,8 +117,8 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     float X;
     float Y;
 
-    X = gamepad2.right_stick_x;
-    Y = -gamepad2.left_stick_y;
+    X = -gamepad2.right_stick_x;
+    Y = gamepad2.left_stick_y;
     leftDrive.setPower(Y - X);
     rightDrive.setPower(Y + X);
   }
@@ -127,6 +127,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
    * Manual control for the Core Hex powered feeder and the agitator servo in the hopper
    */
   private void manualCoreHexAndServoControl() {
+
     // Manual control for the Core Hex intake
     if (gamepad1.x) {
       coreHex.setPower(0.5);
@@ -176,7 +177,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
    */
   private void BANK_SHOT_AUTO() {
     ((DcMotorEx) flywheel).setVelocity(bankVelocity);
-    servo.setPower(-1);
+    //servo.setPower(-1);
     if (((DcMotorEx) flywheel).getVelocity() >= bankVelocity - 100) {
       coreHex.setPower(1);
     } else {
@@ -191,7 +192,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
    */
   private void FAR_POWER_AUTO() {
     ((DcMotorEx) flywheel).setVelocity(farVelocity);
-    servo.setPower(-1);
+    //servo.setPower(-1);
     if (((DcMotorEx) flywheel).getVelocity() >= farVelocity - 100) {
       coreHex.setPower(1);
     } else {
