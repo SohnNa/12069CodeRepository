@@ -2,6 +2,8 @@
 This version of the starterBot code has been changed to allow for two drivers. Gamepad2 controls the movement of the robot and Gamepad 1 controls the launcher. 
 This might help drivers not have to learn as much at once. 
 
+Also, we are not using one of the motors. No idea which. Think it might be coreHex. But here we go, hope it works.
+
 */
 
 
@@ -48,7 +50,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     coreHex.setDirection(DcMotor.Direction.REVERSE);
     leftDrive.setDirection(DcMotor.Direction.REVERSE);
     //Ensures the servo is active and ready
-    servo.setPower(0);
+    //servo.setPower(0);
 
   //On initilization the Driver Station will prompt for which OpMode should be run - Auto Blue, Auto Red, or TeleOp
     while (opModeInInit()) {
@@ -141,7 +143,9 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
       servo.setPower(-1);
     }
   }
-  
+
+
+
     /**
    * This if/else statement contains the controls for the flywheel, both manual and auto.
    * Circle and Square will spin up ONLY the flywheel to the target velocity set.
@@ -162,9 +166,9 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
       ((DcMotorEx) flywheel).setVelocity(0);
       coreHex.setPower(0);
       // The check below is in place to prevent stuttering with the servo. It checks if the servo is under manual control!
-      if (!gamepad1.dpad_right && !gamepad1.dpad_left) {
-        servo.setPower(0);
-      }
+      //if (!gamepad1.dpad_right && !gamepad1.dpad_left) {
+       // servo.setPower(0);
+      //}
     }
   }
 
@@ -243,7 +247,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
       }
       ((DcMotorEx) flywheel).setVelocity(0);
       coreHex.setPower(0);
-      servo.setPower(0);
+      //servo.setPower(0);
       // Back Up
       autoDrive(0.5, -12, -12, 5000);
       // Turn
@@ -271,7 +275,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
       }
       ((DcMotorEx) flywheel).setVelocity(0);
       coreHex.setPower(0);
-      servo.setPower(0);
+      //servo.setPower(0);
       // Back Up
       autoDrive(0.5, -12, -12, 5000);
       // Turn
