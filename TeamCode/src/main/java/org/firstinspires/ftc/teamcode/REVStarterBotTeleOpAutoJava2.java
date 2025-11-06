@@ -119,8 +119,8 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     float X;
     float Y;
 
-    X = -gamepad2.right_stick_x;
-    Y = gamepad2.left_stick_y;
+    X = gamepad2.right_stick_x;
+    Y = -gamepad2.left_stick_y;
     leftDrive.setPower(Y - X);
     rightDrive.setPower(Y + X);
   }
