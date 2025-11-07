@@ -119,10 +119,16 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     float X;
     float Y;
 
-    X = gamepad2.right_stick_x;
+    X = -gamepad2.right_stick_x;
     Y = -gamepad2.left_stick_y;
-    leftDrive.setPower(Y - X);
-    rightDrive.setPower(Y + X);
+
+
+    ((DcMotorEx) leftDrive).setVelocity((Y-X) * 2800);
+
+    ((DcMotorEx) rightDrive).setVelocity((Y+X) * 2800);
+
+    //leftDrive.setPower(Y - X);
+    //rightDrive.setPower(Y + X);
   }
   
     /**
@@ -130,12 +136,7 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
    */
   private void manualCoreHexAndServoControl() {
 
-    // Manual control for the Core Hex intake
-    if (gamepad1.x) {
-      //coreHex.setPower(0.5);
-    } else if (gamepad1.y) {
-      //coreHex.setPower(-0.5);
-    }
+
     // Manual control for the hopper's servo
     if (gamepad1.dpad_left) {
       servo.setPower(1);
@@ -143,7 +144,19 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
       servo.setPower(-1);
     }
   }
+  /*
+  if (gamepad2.dpad_left) {
+    leftDrive.setPower(-0.5);
+    rightDrive.setPower(0.5);
+  } else if (gamepad2.dpad_right) {
+    leftDrive.setPower(0.5);
+    rightDrive.setPower(-0.5);
+  } else {
+    ((DcMotorEx) leftDrive).setVelocity((Y-X) * 2800);
 
+    ((DcMotorEx) rightDrive).setVelocity((Y+X) * 2800);
+  }
+*/
 
 
     /**
@@ -162,6 +175,8 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
       ((DcMotorEx) flywheel).setVelocity(bankVelocity);
     } else if (gamepad1.a) {
       ((DcMotorEx) flywheel).setVelocity(maxVelocity);
+    } else if (gamepad1.x) {
+      ((DcMotorEx) flywheel).setVelocity(2100);
     } else {
       ((DcMotorEx) flywheel).setVelocity(0);
       //coreHex.setPower(0);
