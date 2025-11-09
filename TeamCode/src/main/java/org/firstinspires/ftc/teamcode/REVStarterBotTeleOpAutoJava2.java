@@ -123,12 +123,12 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
     Y = -gamepad2.left_stick_y;
 
 
-    ((DcMotorEx) leftDrive).setVelocity((Y-X) * 2800);
+    //((DcMotorEx) leftDrive).setVelocity((Y-X) * 2800);
 
-    ((DcMotorEx) rightDrive).setVelocity((Y+X) * 2800);
+    //((DcMotorEx) rightDrive).setVelocity((Y+X) * 2800);
 
-    //leftDrive.setPower(Y - X);
-    //rightDrive.setPower(Y + X);
+    leftDrive.setPower((Y - X) * 0.8);
+    rightDrive.setPower((Y + X) * 0.8);
   }
   
     /**

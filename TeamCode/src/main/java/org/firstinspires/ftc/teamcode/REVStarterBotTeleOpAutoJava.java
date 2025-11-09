@@ -222,7 +222,8 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
    * The robot will fire the pre-loaded balls until the 10 second timer ends. 
    * Then it will back away from the goal and off the launch line.
    */
-  private void doAutoBlue() {
+  private void
+  () {
     if (opModeIsActive()) {
       telemetry.addData("RUNNING OPMODE", operationSelected);
       telemetry.update();
