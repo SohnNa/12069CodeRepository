@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp
+@TeleOp(name = "Starterbot w/ Drive Forward Blue Auto")
 public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
 
   private DcMotor flywheel;
@@ -222,26 +222,33 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
    * The robot will fire the pre-loaded balls until the 10 second timer ends. 
    * Then it will back away from the goal and off the launch line.
    */
-  private void doAutoBlue() {
+
+
+  private void doAutoBlue
+  () {
     if (opModeIsActive()) {
       telemetry.addData("RUNNING OPMODE", operationSelected);
       telemetry.update();
       // Fire balls
-      autoLaunchTimer.reset();
-      while (opModeIsActive() && autoLaunchTimer.milliseconds() < 10000) {
-        BANK_SHOT_AUTO();
-        telemetry.addData("Launcher Countdown", autoLaunchTimer.seconds());
-        telemetry.update();
-      }
-      ((DcMotorEx) flywheel).setVelocity(0);
-      coreHex.setPower(0);
-      servo.setPower(0);
+      //autoLaunchTimer.reset();
+      //while (opModeIsActive() && autoLaunchTimer.milliseconds() < 10000) {
+        //BANK_SHOT_AUTO();
+        //telemetry.addData("Launcher Countdown", autoLaunchTimer.seconds());
+        //telemetry.update();
+      //}
+      //((DcMotorEx) flywheel).setVelocity(0);
+      //coreHex.setPower(0);
+      //servo.setPower(0);
       // Back Up
-      autoDrive(0.5, -12, -12, 5000);
+      //autoDrive(0.5, -12, -12, 5000);
       // Turn
-      autoDrive(0.5, -8, 8, 5000);
+      //autoDrive(0.5, -8, 8, 5000);
       // Drive off Line
-      autoDrive(1, -50, -50, 5000);
+      leftDrive.setPower(1);
+      rightDrive.setPower(1);
+      sleep(2000);
+      leftDrive.setPower(0);
+      rightDrive.setPower(0);
     }
   }
 
