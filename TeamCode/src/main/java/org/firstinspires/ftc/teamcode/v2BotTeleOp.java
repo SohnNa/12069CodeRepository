@@ -25,7 +25,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 @TeleOp(name = "v2BotTeleOp")
 //@Disabled
 public class v2BotTeleOp extends LinearOpMode {
-    
+
+    private CRServo servo;
 
     //dashboard = FtcDashboard.getInstance();
     DistanceSensor distance_1;
@@ -41,9 +42,9 @@ public class v2BotTeleOp extends LinearOpMode {
         DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class,"backRight");
 
-        CRServo servo = hardwareMap.get("servo"); 
+        servo = hardwareMap.get(CRServo.class, "servo");
 
-        DcMotorEx flywheel = hardwareMap.get(DcmotorEx.class, "flywheel");
+        DcMotorEx flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
         
 
         
@@ -79,7 +80,7 @@ public class v2BotTeleOp extends LinearOpMode {
 
             if (gamepad1.dpad_left) {
                 servo.setPower(1);
-            } else if (gamepad.dpad_right) {
+            } else if (gamepad1.dpad_right) {
                 servo.setPower(-1);
             }
 
@@ -134,10 +135,10 @@ public class v2BotTeleOp extends LinearOpMode {
             
             //Total power calculations. 
             
-            frontLeft.setVelocity(frontLeftPower * 2800);
-            backLeft.setVelocity(backLeftPower * 2800);
-            frontRight.setVelocity(frontRightPower * 2800);
-            backRight.setVelocity(backRightPower * 28000);
+            frontLeft.setVelocity(frontLeftPower * 2700);
+            backLeft.setVelocity(backLeftPower * 2700);
+            frontRight.setVelocity(frontRightPower * 2700);
+            backRight.setVelocity(backRightPower * 2700);
         }
     }
 }
