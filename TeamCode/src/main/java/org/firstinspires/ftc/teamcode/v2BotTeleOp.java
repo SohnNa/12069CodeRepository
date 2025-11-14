@@ -43,7 +43,7 @@ public class v2BotTeleOp extends LinearOpMode {
 
         CRServo servo = hardwareMap.get("servo"); 
 
-        DcMotor flywheel = hardwareMap.get(Dcmotor.class, "flywheel");
+        DcMotorEx flywheel = hardwareMap.get(DcmotorEx.class, "flywheel");
         
 
         
@@ -70,13 +70,28 @@ public class v2BotTeleOp extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_y; 
-            double x = gamepad1.left_stick_x;
-            double rx = gamepad1.right_stick_x;
+            double y = -gamepad2.left_stick_y; 
+            double x = gamepad2.left_stick_x;
+            double rx = gamepad2.right_stick_x;
             
             double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-           
-           
+
+
+            if (gamepad1.dpad_left) {
+                servo.setPower(1);
+            } else if (gamepad.dpad_right) {
+                servo.setPower(-1);
+            }
+
+            if (gamepad1.a) {
+                ((DcMotorEx) flywheel).setVelocity(2800);
+            } else if (gamepad1.x) {
+                ((DcMotorEx) flywheel).setVelocity(2100);
+            } else if (gamepad1.b) {
+                ((DcMotorEx) flywheel).setVelocity(1300);
+            } else {
+                ((DcMotorEx) flywheel).setVelocity(0);
+            }
            
             //if (rx != 0) {
             //    desiredBotHeading = botHeading; 
