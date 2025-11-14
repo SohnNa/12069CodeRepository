@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 
-@TeleOp(name = "v2BotTeleOp")
+@TeleOp(name = "v3BotTeleOp")
 //@Disabled
 public class v3BotTeleOp extends LinearOpMode {
     private CRServo servo;
@@ -59,8 +59,8 @@ public class v3BotTeleOp extends LinearOpMode {
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // Adjust the orientation parameters to match your robot
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
-                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
         // Without this, the REV Hub's orientation is assumed to be logo up / USB forward
         imu.initialize(parameters);
 
@@ -87,21 +87,24 @@ public class v3BotTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.a) {
-                ((DcMotorEx) flywheel).setVelocity(2800);
+                flywheel.setVelocity(2800);
             } else if (gamepad1.x) {
-                ((DcMotorEx) flywheel).setVelocity(2100);
+                flywheel.setVelocity(2100);
             } else if (gamepad1.b) {
-                ((DcMotorEx) flywheel).setVelocity(1300);
+                flywheel.setVelocity(1300);
             } else {
-                ((DcMotorEx) flywheel).setVelocity(0);
+                flywheel.setVelocity(0);
             }
 
+            /*
+            if (rx != 0) {
+                desiredBotHeading = botHeading;
+            }
+            else {
+                rx = (botHeading - desiredBotHeading)/(Math.PI/2);
+            }
+            */
 
-            //if (rx != 0) {
-            //    desiredBotHeading = botHeading;
-            //}
-            //else {
-            //    rx = (botHeading - desiredBotHeading)/(Math.PI/2);
 
             if (rx > 1) {
                 rx = 1;
@@ -110,7 +113,15 @@ public class v3BotTeleOp extends LinearOpMode {
                 rx = -1;
             }
 
-            //}
+            if (gamepad2.y) {
+                intakeMotor.setVelocity(2800);
+            } else if (gamepad2.b) {
+                intakeMotor.setVelocity(-2800);
+            } else {
+                intakeMotor.setVelocity(0);
+            }
+
+
 
 
 
