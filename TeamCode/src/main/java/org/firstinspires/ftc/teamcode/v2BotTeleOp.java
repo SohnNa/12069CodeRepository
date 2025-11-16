@@ -127,24 +127,48 @@ public class v2BotTeleOp extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
+            telemetry.addData("y", y);
+            telemetry.addData("x", x);
+            telemetry.addData("rx", rx);
 
 
-            telemetry.addData("backLeft", backLeft.getVelocity());
-            telemetry.addData("backRight", backRight.getVelocity());
-            telemetry.addData("frontLeft", frontLeft.getVelocity());
-            telemetry.addData("frontRight", frontRight.getVelocity());
-            telemetry.addData("Flywheel", flywheel.getVelocity());
+
+            telemetry.addData("frontLeftPower", frontLeftPower);
+            telemetry.addData("frontRightPower", frontRightPower);
+            telemetry.addData("backLeftPower", backLeftPower);
+            telemetry.addData("backRightPower", backRightPower);
+
+
+            telemetry.addData("backLeftVelocity", backLeft.getVelocity());
+            telemetry.addData("backRightVelocity", backRight.getVelocity());
+            telemetry.addData("frontLeftVelocity", frontLeft.getVelocity());
+            telemetry.addData("frontRightVelocity", frontRight.getVelocity());
+
+            telemetry.addData("backLeft", backLeft.getPower());
+            telemetry.addData("backRight", backRight.getPower());
+            telemetry.addData("frontLeft", frontLeft.getPower());
+            telemetry.addData("frontRight", frontRight.getPower());
             
             telemetry.update();
                 
             
             
-            //Total power calculations. 
-            
+            //Total power calculations.
+
+
             frontLeft.setVelocity(frontLeftPower * 2700);
             backLeft.setVelocity(backLeftPower * 2700);
             frontRight.setVelocity(frontRightPower * 2700);
             backRight.setVelocity(backRightPower * 2700);
+
+            /*
+            frontLeft.setVelocity(200);
+            backLeft.setVelocity(200);
+            frontRight.setVelocity(200);
+            backRight.setVelocity(200);
+               */
+
+
         }
     }
 }
