@@ -126,8 +126,14 @@ public class v2BotTeleOp extends LinearOpMode {
             double backLeftPower = (rotY - rotX + rx) / denominator;
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
-            
-            
+
+
+
+            telemetry.addData("backLeft", backLeft.getVelocity());
+            telemetry.addData("backRight", backRight.getVelocity());
+            telemetry.addData("frontLeft", frontLeft.getVelocity());
+            telemetry.addData("frontRight", frontRight.getVelocity());
+            telemetry.addData("Flywheel", flywheel.getVelocity());
             
             telemetry.update();
                 
