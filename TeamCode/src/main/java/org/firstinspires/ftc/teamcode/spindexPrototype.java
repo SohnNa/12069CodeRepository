@@ -28,6 +28,9 @@ public class spindexPrototype extends LinearOpMode {
     //dashboard = FtcDashboard.getInstance();
     @Override
     public void runOpMode() throws InterruptedException {
+        boolean limitCondition1 = false;
+
+        boolean limitCondition2 = false;
         
             
         
@@ -38,24 +41,56 @@ public class spindexPrototype extends LinearOpMode {
         limitOne = hardwareMap.get(TouchSensor.class, "limitOne");
         limitTwo = hardwareMap.get(TouchSensor.class, "limitTwo");
 
-        
-        // Reversing the motors.
-
-        
-
-ion is assumed to be logo up / USB forward
-        imu.initialize(parameters);
-        
-
+        //When looking up documentation or CR Servos, I found this line. Hoping this might resets the servo to it starting position. Needs testing. 
+        //rotateServo.resetDeviceConfigurationForOpMode();
       
         waitForStart();
         imu.resetYaw();
-        //This finds the desired way the robot should point at the start...yeah
        
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
+            if (gamepad1.dpad_right) {
+                rotateServo.setPower(0.35);
+            } else if (gamepad1.dpad_left) {
+                rotateServo.setPower(0.65);
+            } else {
+                rotateServo.setPower(0.5);
+            }
 
 
 
+            /*
+            if (gamepad1.dpad_left && !limitCondition1) {
+                rotateServo.setPower(0.35);
+            } else if (gamepad1.dpad_right && !limitCondition1) {
+                rotateServo.setPower(0.65);
+            } else {
+                rotateServo.setPower(0.5);
+            }
+
+
+            */
+
+            if (limitOne.isPressed) {
+                limitCondition1 = true;
+                telemetry.addData("Switch One", "On");
+            } else {
+                limitComdition1 = false;
+                telemetry.addData("Switch One", "Off");
+            }
+
+            if (limitTwo.isPressed) {
+                limitCondition2 = true;
+                telemetry.addData("Switch Two", "On");
+            } else {
+                limitCondition2 = false;
+                telemetry.addData("Switch Two", "Off");
+            }
+
+            telemetry.addData("Servo power", rotateServo.getPower());
+            
+            
+            
+            telemetry.update();
         }
