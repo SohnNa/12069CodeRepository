@@ -42,7 +42,7 @@ public class v3BotTeleOp extends LinearOpMode {
         DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         DcMotorEx turretMotor = hardwareMap.get(DcMotorEx.class, "turretMotor");
 
-        Servo spindexServo = hardwareMap.servo.get("servo_intake");
+        Servo spServo = hardwareMap.servo.get("servo_intake");
 
         servo = hardwareMap.get(CRServo.class, "servo");
 

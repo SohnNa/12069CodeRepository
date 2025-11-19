@@ -10,8 +10,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-@TeleOp(name = "Mechanum Field Centric Testing")
-public class FieldCentricMecanumTeleOp extends LinearOpMode {
+@TeleOp(name = "basicfieldTeleOp")
+public class basicFieldTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -22,7 +22,6 @@ public class FieldCentricMecanumTeleOp extends LinearOpMode {
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class,"backRight");
 
 
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Retrieve the IMU from the hardware map
@@ -49,7 +48,7 @@ public class FieldCentricMecanumTeleOp extends LinearOpMode {
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
-            double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+            double rotY = x * Math.sin(-botHeading) - y * Math.cos(-botHeading);
 
             rotX = rotX * 1.1;  // Counteract imperfect strafing
 

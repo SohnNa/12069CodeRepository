@@ -32,7 +32,10 @@ public class v2BotTeleOp extends LinearOpMode {
     DistanceSensor distance_1;
     @Override
     public void runOpMode() throws InterruptedException {
-        
+
+        double speed = 1.0f;
+        boolean test = false;
+
             
         
         
@@ -49,8 +52,10 @@ public class v2BotTeleOp extends LinearOpMode {
 
         
         // Reversing the motors.
+
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         
 
         // Retrieve the IMU from the hardware map
@@ -155,18 +160,29 @@ public class v2BotTeleOp extends LinearOpMode {
             
             //Total power calculations.
 
+            if (gamepad2.right_bumper || test) {
+                speed = 0.5f;
+            } else {
+                speed = 1.0f;
+                test = false;
+            }
 
-            frontLeft.setVelocity(frontLeftPower * 2700);
-            backLeft.setVelocity(backLeftPower * 2700);
-            frontRight.setVelocity(frontRightPower * 2700);
-            backRight.setVelocity(backRightPower * 2700);
+            if (gamepad2.left_bumper) {
+                imu.resetYaw();
+            }
+
+
+            frontLeft.setVelocity((frontLeftPower * 2700) * speed);
+            backLeft.setVelocity((backLeftPower * 2700) * speed);
+            frontRight.setVelocity((frontRightPower * 2700) * speed);
+            backRight.setVelocity((backRightPower * 2700) * speed);
 
             /*
             frontLeft.setVelocity(200);
             backLeft.setVelocity(200);
             frontRight.setVelocity(200);
             backRight.setVelocity(200);
-               */
+             */
 
 
         }
