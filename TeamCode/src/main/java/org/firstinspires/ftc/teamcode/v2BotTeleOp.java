@@ -33,8 +33,8 @@ public class v2BotTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        double speed = 1.0f;
-        boolean test = false;
+        double speed;
+        int input = 0;
 
             
         
@@ -42,8 +42,9 @@ public class v2BotTeleOp extends LinearOpMode {
         // THE DECLARING of the... MOTORS!!!!!
         DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class,"frontLeft");
         DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
-        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class,"backRight");
+        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
+
 
         servo = hardwareMap.get(CRServo.class, "servo");
 
@@ -89,14 +90,30 @@ public class v2BotTeleOp extends LinearOpMode {
                 servo.setPower(-1);
             }
 
-            if (gamepad1.a) {
-                ((DcMotorEx) flywheel).setVelocity(2800);
-            } else if (gamepad1.x) {
-                ((DcMotorEx) flywheel).setVelocity(2100);
-            } else if (gamepad1.b) {
-                ((DcMotorEx) flywheel).setVelocity(1300);
+
+            if (input == 1) {
+                flywheel.setVelocity(2600);
+            } else if (input == 2) {
+                flywheel.setVelocity(2100);
+            } else if (input == 3) {
+                flywheel.setVelocity(1600);
+            } else if (input == 4) {
+                flywheel.setVelocity(-1000);
             } else {
-                ((DcMotorEx) flywheel).setVelocity(0);
+                flywheel.setVelocity(0);
+            }
+
+
+            if (gamepad1.a) {
+                input = 1;
+            } else if (gamepad1.x) {
+                input = 2;
+            } else if (gamepad1.b) {
+                input = 3;
+            } else if (gamepad1.y) {
+                input = 4;
+            } else if (gamepad1.guide) {
+                input = 0;
             }
            
             //if (rx != 0) {
@@ -132,16 +149,7 @@ public class v2BotTeleOp extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            telemetry.addData("y", y);
-            telemetry.addData("x", x);
-            telemetry.addData("rx", rx);
 
-
-
-            telemetry.addData("frontLeftPower", frontLeftPower);
-            telemetry.addData("frontRightPower", frontRightPower);
-            telemetry.addData("backLeftPower", backLeftPower);
-            telemetry.addData("backRightPower", backRightPower);
 
 
             telemetry.addData("backLeftVelocity", backLeft.getVelocity());
@@ -149,10 +157,8 @@ public class v2BotTeleOp extends LinearOpMode {
             telemetry.addData("frontLeftVelocity", frontLeft.getVelocity());
             telemetry.addData("frontRightVelocity", frontRight.getVelocity());
 
-            telemetry.addData("backLeft", backLeft.getPower());
-            telemetry.addData("backRight", backRight.getPower());
-            telemetry.addData("frontLeft", frontLeft.getPower());
-            telemetry.addData("frontRight", frontRight.getPower());
+            telemetry.addData("flywheel Velocity", flywheel.getVelocity());
+
             
             telemetry.update();
                 
@@ -160,11 +166,10 @@ public class v2BotTeleOp extends LinearOpMode {
             
             //Total power calculations.
 
-            if (gamepad2.right_bumper || test) {
+            if (gamepad2.right_bumper) {
                 speed = 0.5f;
             } else {
                 speed = 1.0f;
-                test = false;
             }
 
             if (gamepad2.left_bumper) {
