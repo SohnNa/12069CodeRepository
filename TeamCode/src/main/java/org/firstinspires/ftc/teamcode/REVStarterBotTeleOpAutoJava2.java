@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "StarterBot 2 Drivers")
@@ -21,9 +22,9 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
 
   private DcMotor flywheel;
   //private DcMotor coreHex;
-  private DcMotor leftDrive;
+  private DcMotor frontLeft;
   private CRServo servo;
-  private DcMotor rightDrive;
+  private DcMotor frontRight;
 
   private static final int bankVelocity = 1300;
   private static final int farVelocity = 1900;
@@ -40,15 +41,19 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
   public void runOpMode() {
     flywheel = hardwareMap.get(DcMotor.class, "flywheel");
     //coreHex = hardwareMap.get(DcMotor.class, "coreHex");
-    leftDrive = hardwareMap.get(DcMotor.class, "leftDrive");
+    frontLeft = hardwareMap.get(DcMotor.class, "leftDrive");
     servo = hardwareMap.get(CRServo.class, "servo");
-    rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
+    frontRight = hardwareMap.get(DcMotor.class, "rightDrive");
+
+    DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
+    DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
+    DcMotorEx backRight = hardwareMap.get(DcMotorEx.class,"backRight");
     
   // Establishing the direction and mode for the motors
     flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    //flywheel.setDirection(DcMotor.Direction.REVERSE);
-    //coreHex.setDirection(DcMotor.Direction.REVERSE);
-    leftDrive.setDirection(DcMotor.Direction.REVERSE);
+    backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+    frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+    frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     //Ensures the servo is active and ready
     //servo.setPower(0);
 
@@ -127,8 +132,8 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
 
     //((DcMotorEx) rightDrive).setVelocity((Y+X) * 2800);
 
-    leftDrive.setPower((Y - X) * 0.8);
-    rightDrive.setPower((Y + X) * 0.8);
+    frontLeft.setPower((Y - X) * 0.8);
+    frontRight.setPower((Y + X) * 0.8);
   }
   
     /**
@@ -229,19 +234,19 @@ public class REVStarterBotTeleOpAutoJava2 extends LinearOpMode {
    */
   private void autoDrive(double speed, int leftDistanceInch, int rightDistanceInch, int timeout_ms) {
     autoDriveTimer.reset();
-    leftDrive.setTargetPosition((int) (leftDrive.getCurrentPosition() + leftDistanceInch * WHEELS_INCHES_TO_TICKS));
-    rightDrive.setTargetPosition((int) (rightDrive.getCurrentPosition() + rightDistanceInch * WHEELS_INCHES_TO_TICKS));
-    leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    leftDrive.setPower(Math.abs(speed));
-    rightDrive.setPower(Math.abs(speed));
-    while (opModeIsActive() && (leftDrive.isBusy() || rightDrive.isBusy()) && autoDriveTimer.milliseconds() < timeout_ms) {
+    frontLeft.setTargetPosition((int) (frontLeft.getCurrentPosition() + leftDistanceInch * WHEELS_INCHES_TO_TICKS));
+    frontRight.setTargetPosition((int) (frontRight.getCurrentPosition() + rightDistanceInch * WHEELS_INCHES_TO_TICKS));
+    frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontLeft.setPower(Math.abs(speed));
+    frontRight.setPower(Math.abs(speed));
+    while (opModeIsActive() && (frontLeft.isBusy() || frontRight.isBusy()) && autoDriveTimer.milliseconds() < timeout_ms) {
       idle();
     }
-    leftDrive.setPower(0);
-    rightDrive.setPower(0);
-    leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    frontLeft.setPower(0);
+    frontRight.setPower(0);
+    frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
   }
 
   /**
