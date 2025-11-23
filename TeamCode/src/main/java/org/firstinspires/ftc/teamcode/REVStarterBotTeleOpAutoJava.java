@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Starterbot w/ Drive Forward Blue Auto")
+@TeleOp(name = "Autonomous Code(s)")
 public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
 
   private DcMotorEx flywheel;
@@ -23,9 +23,9 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
   private static final int bankVelocity = 1300;
   private static final int farVelocity = 1900;
   private static final int maxVelocity = 2200;
-  private static final String TELEOP = "DriveBackwardW/launching";
+  private static final String TELEOP = "RedBackwardsW/launcher";
   private static final String AUTO_BLUE = "DriveForward";
-  private static final String AUTO_RED = " DriveBackward";
+  private static final String AUTO_RED = " BlueBackwardsW/launcher";
   private String operationSelected = TELEOP;
   private double WHEELS_INCHES_TO_TICKS = (28 * 5 * 3) / (3 * Math.PI);
   private ElapsedTime autoLaunchTimer = new ElapsedTime();
@@ -329,15 +329,40 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
       autoDrive(1, -50, -50, 5000);
 
  */
-      frontLeft.setPower(-0.4);
-      frontRight.setPower(-0.4);
-      backLeft.setPower(-0.4);
-      backRight.setPower(-0.4);
-      sleep(1000);
-      frontLeft.setPower(0);
-      frontRight.setPower(0);
-      backLeft.setPower(0);
-      backRight.setPower(0);
+        frontLeft.setPower(-0.4);
+        frontRight.setPower(-0.4);
+        backLeft.setPower(-0.4);
+        backRight.setPower(-0.4);
+        sleep(1000);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+        sleep(1000);
+        flywheel.setVelocity(1800);
+        sleep(7500);
+        servo.setPower(-1);
+        sleep(3000);
+        flywheel.setVelocity(0);
+        frontLeft.setPower(0.2);
+        frontRight.setPower(-0.2);
+        backLeft.setPower(0.2);
+        backRight.setPower(-0.2);
+        sleep(1000);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+        sleep(1000);
+        frontLeft.setPower(-0.4);
+        frontRight.setPower(-0.4);
+        backLeft.setPower(-0.4);
+        backRight.setPower(-0.4);
+        sleep(1000);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
     }
   }
 }
