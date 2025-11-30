@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 @TeleOp(name = "All Purpose Motor Testing")
-//@Disabled
+@Disabled
 public class catapultTesting extends LinearOpMode {
 
 

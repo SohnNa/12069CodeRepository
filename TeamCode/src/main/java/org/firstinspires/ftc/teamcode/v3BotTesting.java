@@ -22,10 +22,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 
-@TeleOp(name = "v3BotTeleOp")
+@TeleOp(name = "v3BotTesting")
 //@Disabled
-public class v3BotTeleOp extends LinearOpMode {
+public class v3BotTesting extends LinearOpMode {
     private CRServo spindexServo;
+
+
     TouchSensor limitOne;
     TouchSensor limitTwo;
     DistanceSensor distance_1;
@@ -43,7 +45,7 @@ public class v3BotTeleOp extends LinearOpMode {
         DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         DcMotorEx turretMotor = hardwareMap.get(DcMotorEx.class, "turretMotor");
 
-        Servo spatulaServo = hardwareMap.servo.get("servo_intake");
+        Servo spatulaServo = hardwareMap.servo.get("spatulaServo");
 
         limitOne = hardwareMap.get(TouchSensor.class, "limitOne");
         limitTwo = hardwareMap.get(TouchSensor.class, "limitTwo");
@@ -55,8 +57,8 @@ public class v3BotTeleOp extends LinearOpMode {
 
 
         // Reversing the motors.
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
         // Retrieve the IMU from the hardware map
@@ -86,15 +88,7 @@ public class v3BotTeleOp extends LinearOpMode {
 
 
 
-            if (gamepad1.a) {
-                flywheel.setVelocity(2800);
-            } else if (gamepad1.x) {
-                flywheel.setVelocity(2100);
-            } else if (gamepad1.b) {
-                flywheel.setVelocity(1300);
-            } else {
-                flywheel.setVelocity(0);
-            }
+
 
             /*
             if (rx != 0) {
@@ -115,16 +109,35 @@ public class v3BotTeleOp extends LinearOpMode {
 
             if (gamepad2.y) {
                 intakeMotor.setVelocity(2800);
-            } else if (gamepad2.b) {
+            } else if (gamepad2.x) {
                 intakeMotor.setVelocity(-2800);
             } else {
                 intakeMotor.setVelocity(0);
             }
 
+            if (gamepad1.left_bumper) {
+                spatulaServo.setPosition(-1);
+            } else if (gamepad1.right_bumper) {
+                spatulaServo.setPosition(1);
+            }
 
+            if (gamepad2.b) {
+                turretMotor.setVelocity(1600);
+            } else if (gamepad2.a) {
+                turretMotor.setVelocity(-1600);
+            } else {
+                turretMotor.setVelocity(0);
+            }
 
-
-
+            if (gamepad1.a) {
+                flywheel.setVelocity(2600);
+            } else if (gamepad1.x) {
+                flywheel.setVelocity(2100);
+            } else if (gamepad1.b) {
+                flywheel.setVelocity(1600);
+            } else {
+                flywheel.setVelocity(0);
+            }
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -141,10 +154,16 @@ public class v3BotTeleOp extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            double turretVelocity = (gamepad1.right_trigger * gamepad1.right_trigger) - (gamepad1.left_trigger * gamepad1.left_trigger);
+            //double turretVelocity = (gamepad1.right_trigger * gamepad1.right_trigger) - (gamepad1.left_trigger * gamepad1.left_trigger);
 
             telemetry.addData("Turret Velocity", turretMotor.getVelocity());
             telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
+
+
+            telemetry.addData("backLeftVelocity", backLeft.getVelocity());
+            telemetry.addData("backRightVelocity", backRight.getVelocity());
+            telemetry.addData("frontLeftVelocity", frontLeft.getVelocity());
+            telemetry.addData("frontRightVelocity", frontRight.getVelocity());
 
 
             telemetry.update();
@@ -155,7 +174,7 @@ public class v3BotTeleOp extends LinearOpMode {
             //Total power calculations.
 
 
-            turretMotor.setVelocity(turretVelocity * 2800);
+            //turretMotor.setVelocity(turretVelocity * 2800);
 
             frontLeft.setVelocity(frontLeftPower * 2700);
             backLeft.setVelocity(backLeftPower * 2700);
