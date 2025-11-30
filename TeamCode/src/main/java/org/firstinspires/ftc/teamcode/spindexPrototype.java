@@ -47,11 +47,11 @@ public class spindexPrototype extends LinearOpMode {
         while (opModeIsActive()) {
             /*
             if (gamepad1.dpad_right) {
-                spindexServo.setPower(0.35);
+                spindexServo.setPower(0.75);
             } else if (gamepad1.dpad_left) {
-                spindexServo.setPower(0.65);
+                spindexServo.setPower(-0.75);
             } else {
-                spindexServo.setPower(0.5);
+                spindexServo.setPower(0);
             }
             */
 

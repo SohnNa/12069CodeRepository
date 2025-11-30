@@ -139,6 +139,15 @@ public class v3BotTesting extends LinearOpMode {
                 flywheel.setVelocity(0);
             }
 
+
+            if (gamepad1.dpad_right) {
+                spindexServo.setPower(0.75);
+            } else if (gamepad1.dpad_left) {
+                spindexServo.setPower(-0.75);
+            } else {
+                spindexServo.setPower(0);
+            }
+
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
             double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
