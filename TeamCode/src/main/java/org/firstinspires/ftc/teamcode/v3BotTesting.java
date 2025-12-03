@@ -121,6 +121,10 @@ public class v3BotTesting extends LinearOpMode {
                 spatulaServo.setPosition(1);
             }
 
+            if (gamepad1.dpad_up) {
+                loadLauncher();
+            }
+
             if (gamepad2.b) {
                 turretMotor.setVelocity(1600);
             } else if (gamepad2.a) {
@@ -192,3 +196,11 @@ public class v3BotTesting extends LinearOpMode {
         }
     }
 }
+
+private void loadLauncher() {
+    spatulaServo.setPosition(1);
+    sleep(2000);
+    spatulaServo.setPosition(-1);
+}
+
+
