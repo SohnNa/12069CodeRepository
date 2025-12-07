@@ -312,23 +312,6 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
     if (opModeIsActive()) {
       telemetry.addData("RUNNING OPMODE", operationSelected);
       telemetry.update();
-/*
-      while (opModeIsActive() && autoLaunchTimer.milliseconds() < 10000) {
-        BANK_SHOT_AUTO();
-        telemetry.addData("Launcher Countdown", autoLaunchTimer.seconds());
-        telemetry.update();
-      }
-      ((DcMotorEx) flywheel).setVelocity(0);
-
-      servo.setPower(0);
-      // Back Up
-      autoDrive(0.5, -12, -12, 5000);
-      // Turn
-      autoDrive(0.5, 8, -8, 5000);
-      // Drive off Line
-      autoDrive(1, -50, -50, 5000);
-
- */
         frontLeft.setPower(-0.4);
         frontRight.setPower(-0.4);
         backLeft.setPower(-0.4);

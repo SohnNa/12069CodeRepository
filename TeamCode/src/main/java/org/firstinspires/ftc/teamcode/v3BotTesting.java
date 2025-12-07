@@ -1,13 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
+//import static android.os.SystemClock.sleep;
+
+import android.graphics.RenderNode;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,6 +29,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.config.Config;
+
+
+
+//April Tag Imports
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 
 
 
@@ -58,6 +79,7 @@ public class v3BotTesting extends LinearOpMode {
 
         // Reversing the motors.
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
@@ -122,7 +144,9 @@ public class v3BotTesting extends LinearOpMode {
             }
 
             if (gamepad1.dpad_up) {
-                loadLauncher();
+                spatulaServo.setPosition(1);
+                sleep(1000);
+                spatulaServo.setPosition(-1);
             }
 
             if (gamepad2.b) {
@@ -196,11 +220,3 @@ public class v3BotTesting extends LinearOpMode {
         }
     }
 }
-
-private void loadLauncher() {
-    spatulaServo.setPosition(1);
-    sleep(2000);
-    spatulaServo.setPosition(-1);
-}
-
-
