@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -15,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 //import com.acmerobotics.dashboard.FtcDashboard;
@@ -25,10 +24,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 @TeleOp(name = "v3BotTeleOp")
 //@Disabled
 public class v3BotTeleOp extends LinearOpMode {
-    private CRServo spindexServo;
+    double speed;
     TouchSensor limitOne;
     TouchSensor limitTwo;
     DistanceSensor distance_1;
+
+    private ElapsedTime runtime = new ElapsedTime();
+
+    double prevTime = 0.0;
+
+    int next_pos = 0;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -40,15 +47,19 @@ public class v3BotTeleOp extends LinearOpMode {
         DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
         DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class,"frontRight");
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class,"backRight");
+
         DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         DcMotorEx turretMotor = hardwareMap.get(DcMotorEx.class, "turretMotor");
+        DcMotorEx spindexMotor = hardwareMap.get(DcMotorEx.class, "spindexMotor");
 
         Servo spatulaServo = hardwareMap.servo.get("servo_intake");
+
+        ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
         limitOne = hardwareMap.get(TouchSensor.class, "limitOne");
         limitTwo = hardwareMap.get(TouchSensor.class, "limitTwo");
 
-        spindexServo = hardwareMap.get(CRServo.class, "spindexServo");
+
 
         DcMotorEx flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
 
@@ -69,7 +80,11 @@ public class v3BotTeleOp extends LinearOpMode {
         imu.initialize(parameters);
 
 
+        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
         waitForStart();
+        runtime.reset();
         imu.resetYaw();
         //This finds the desired way the robot should point at the start...yeah
         double desiredBotHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
@@ -86,15 +101,7 @@ public class v3BotTeleOp extends LinearOpMode {
 
 
 
-            if (gamepad1.a) {
-                flywheel.setVelocity(2800);
-            } else if (gamepad1.x) {
-                flywheel.setVelocity(2100);
-            } else if (gamepad1.b) {
-                flywheel.setVelocity(1300);
-            } else {
-                flywheel.setVelocity(0);
-            }
+
 
             /*
             if (rx != 0) {
@@ -121,6 +128,43 @@ public class v3BotTeleOp extends LinearOpMode {
                 intakeMotor.setVelocity(0);
             }
 
+            if (gamepad1.a) {
+                flywheel.setVelocity(2800);
+            } else if (gamepad1.x) {
+                flywheel.setVelocity(-1600);
+            } else if (gamepad1.b) {
+                flywheel.setVelocity(1600);
+            } else {
+                flywheel.setVelocity(0);
+            }
+            next_pos = (runtime.milliseconds() - prevTime) * turretMotor.getVelocity();
+            if (gamepad1.left_bumper) {
+                //if () limits
+                turretMotor.setTargetPosition(next_pos);
+                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turretMotor.setVelocity(600);
+            } else if (gamepad1.right_bumper) {
+                turretMotor.setTargetPosition(next_pos);
+                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turretMotor.setVelocity(-600);
+            }
+
+
+
+
+            //Driver Controls. Speed control
+            if (gamepad2.right_bumper) {
+                speed = 0.5f;
+            } else {
+                speed = 1.0f;
+            }
+
+            if (gamepad2.left_bumper) {
+                imu.resetYaw();
+            }
+
+
+
 
 
 
@@ -141,13 +185,18 @@ public class v3BotTeleOp extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-            double turretVelocity = (gamepad1.right_trigger * gamepad1.right_trigger) - (gamepad1.left_trigger * gamepad1.left_trigger);
+
 
             telemetry.addData("Turret Velocity", turretMotor.getVelocity());
             telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
-
+            //Color Sensor Telemetry
+            telemetry.addData("Red", colorSensor.red());
+            telemetry.addData("Green", colorSensor.green());
+            telemetry.addData("Blue", colorSensor.blue());
 
             telemetry.update();
+
+
 
 
 
@@ -155,12 +204,15 @@ public class v3BotTeleOp extends LinearOpMode {
             //Total power calculations.
 
 
-            turretMotor.setVelocity(turretVelocity * 2800);
 
-            frontLeft.setVelocity(frontLeftPower * 2700);
-            backLeft.setVelocity(backLeftPower * 2700);
-            frontRight.setVelocity(frontRightPower * 2700);
-            backRight.setVelocity(backRightPower * 2700);
+
+            frontLeft.setVelocity((frontLeftPower * 2700) * speed);
+            backLeft.setVelocity((backLeftPower * 2700) * speed);
+            frontRight.setVelocity((frontRightPower * 2700) * speed);
+            backRight.setVelocity((backRightPower * 2700) * speed);
+
+            prevTime = runtime.milliseconds();
+
         }
     }
 }
