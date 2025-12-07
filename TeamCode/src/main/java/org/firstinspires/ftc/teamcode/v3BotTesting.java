@@ -150,9 +150,9 @@ public class v3BotTesting extends LinearOpMode {
             }
 
             if (gamepad2.b) {
-                turretMotor.setVelocity(1600);
+                turretMotor.setVelocity(600);
             } else if (gamepad2.a) {
-                turretMotor.setVelocity(-1600);
+                turretMotor.setVelocity(-600);
             } else {
                 turretMotor.setVelocity(0);
             }
