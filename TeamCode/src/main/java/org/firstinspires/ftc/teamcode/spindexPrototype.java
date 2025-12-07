@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 
 
 @TeleOp(name = "spindexPrototype")
@@ -18,25 +22,19 @@ public class spindexPrototype extends LinearOpMode {
     //dashboard = FtcDashboard.getInstance();
     @Override
     public void runOpMode() throws InterruptedException {
-        boolean limitCondition1 = true;
-
         boolean launching = false;
 
-        boolean forceRun = true;
-
-        boolean toLaunch = false;
-
-        boolean running = false;
-
-        boolean runningTwo = false;
-
-        boolean wantToLaunch = false;
+        boolean SpatulaInWay = true;
 
         int sleepCounter = 0;
         boolean isSleeping = false;
 
+        boolean toFirstPos = true;
 
-        spindexServo = hardwareMap.get(CRServo.class, "spindexServo");
+        int SpindexPos = 0;
+
+
+        DcMotorEx spindexMotor = hardwareMap.get(DcMotorEx.class, "spindexMotor");
 
         Servo spatulaServo = hardwareMap.servo.get("spatulaServo");
 
@@ -55,10 +53,21 @@ public class spindexPrototype extends LinearOpMode {
 
 
 
-            if (gamepad1.dpadRightWasPressed()) {
-                forceRun = true;
+            if (gamepad1.dpadRightWasPressed() && !toFirstPos  && !SpatulaInWay) {
+                // rotating between intake positions
+                SpindexPos += 96;
+                spindexMotor.setTargetPosition(SpindexPos);
+                spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                spindexMotor.setVelocity(700);
             }
-
+            else if (gamepad1.dpadLeftWasPressed() && !toFirstPos  && !SpatulaInWay) {
+                // rotating between intake positions
+                SpindexPos -= 96;
+                spindexMotor.setTargetPosition(SpindexPos);
+                spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                spindexMotor.setVelocity(700);
+            }
+            /*
             if (launching || limitCondition1) spindexServo.setPower(0.1);
             //else if () spindexServo.setPower(0.75);
             else spindexServo.setPower(0);
@@ -84,44 +93,60 @@ public class spindexPrototype extends LinearOpMode {
             }
             else launching = false;
 
-//            if (runningTwo && !limitTwo.isPressed()) {
-//                runningTwo = false;
-//                toLaunch = false;
-//            }
+            if (runningTwo && !limitTwo.isPressed()) {
+                runningTwo = false;
+                toLaunch = false;
+            }
+            */
 
-            if (gamepad1.a) {
-                wantToLaunch = true;
-            } else if (gamepad1.b) {
-                wantToLaunch = false;
+            // going to first limit
+            if (toFirstPos && !limitOne.isPressed()) {
+                spindexMotor.setVelocity(700);
+            }
+            else {
+                spindexMotor.setVelocity(0);
+                toFirstPos = false;
+                spindexMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+
+
+
+            if (gamepad1.a && !SpatulaInWay) {
+                SpindexPos += 48;
+                spindexMotor.setTargetPosition(SpindexPos);
+                spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                spindexMotor.setVelocity(1400);
+                launching = !launching;
             }
 
 
             if (gamepad2.left_bumper) {
                 spatulaServo.setPosition(-1);
-            } else if (gamepad2.right_bumper && !limitCondition1 && !launching) {
+                SpatulaInWay = false;
+            } else if (gamepad2.back && launching && spindexMotor.getVelocity() < 300) {
                 spatulaServo.setPosition(1);
+                SpatulaInWay = true;
             }
 
-            if (gamepad2.back && !limitCondition1 && !launching) {
+            if (gamepad2.back && launching && spindexMotor.getVelocity() < 300) {
                 spatulaServo.setPosition(1);
+                SpatulaInWay = true;
                 isSleeping = true;
                 sleepCounter = 0;
             }
             if (isSleeping && sleepCounter >= 30) {
                 isSleeping = false;
                 spatulaServo.setPosition(-1);
+                SpatulaInWay = false;
 
             }
             sleepCounter ++;
 
-            telemetry.addData("Servo power: ", spindexServo.getPower());
-            telemetry.addData("Magnetic Switch 1 is letting servo run: ", limitCondition1);
-            telemetry.addData("Not in launching position: ", launching);
-            // telemetry.addData(": ", toLaunch);
-            telemetry.addData("Going to next limit: ", forceRun);
+            telemetry.addData("Spindexer speed", spindexMotor.getPower());
+            // telemetry.addData("Magnetic Switch 1 is letting servo run", limitCondition1);
 
             // next line of telemetry needed in drive code:
-            telemetry.addData("In launching mode: ", wantToLaunch);
+            telemetry.addData("In launching position", launching);
             telemetry.update();
         }
     }
