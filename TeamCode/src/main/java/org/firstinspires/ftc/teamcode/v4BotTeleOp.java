@@ -266,6 +266,7 @@ public class v4BotTeleOp extends LinearOpMode {
             //Intake & Output motor Telemetry
             telemetry.addData("Turret Velocity", turretMotor.getVelocity());
             telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
+            telemetry.addData("Flywheel", flywheel.getVelocity());
             //Color Sensor Telemetry
             telemetry.addData("Red", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());
