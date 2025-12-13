@@ -24,7 +24,7 @@ public class spindexPrototype extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         boolean launching = false;
 
-        boolean SpatulaInWay = true;
+        boolean spatulaInWay = false;
 
         int sleepCounter = 0;
         boolean isSleeping = false;
@@ -32,6 +32,7 @@ public class spindexPrototype extends LinearOpMode {
         boolean toFirstPos = true;
 
         int SpindexPos = 0;
+
 
 
         DcMotorEx spindexMotor = hardwareMap.get(DcMotorEx.class, "spindexMotor");
@@ -50,22 +51,32 @@ public class spindexPrototype extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            // going to first limit
+            if (toFirstPos) {
+                if (!limitOne.isPressed()) {
+                    spindexMotor.setVelocity(25);
+                } else {
+                    spindexMotor.setVelocity(0);
+                    toFirstPos = false;
+                    spindexMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                }
+            }
 
 
 
-            if (gamepad1.dpadRightWasPressed() && !toFirstPos  && !SpatulaInWay) {
+            if (gamepad1.dpadRightWasPressed() && !toFirstPos  && !spatulaInWay) {
                 // rotating between intake positions
                 SpindexPos += 96;
                 spindexMotor.setTargetPosition(SpindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                spindexMotor.setVelocity(700);
+                spindexMotor.setVelocity(100);
             }
-            else if (gamepad1.dpadLeftWasPressed() && !toFirstPos  && !SpatulaInWay) {
+            else if (gamepad1.dpadLeftWasPressed() && !toFirstPos  && !spatulaInWay) {
                 // rotating between intake positions
                 SpindexPos -= 96;
                 spindexMotor.setTargetPosition(SpindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                spindexMotor.setVelocity(700);
+                spindexMotor.setVelocity(100);
             }
             /*
             if (launching || limitCondition1) spindexServo.setPower(0.1);
@@ -99,51 +110,47 @@ public class spindexPrototype extends LinearOpMode {
             }
             */
 
-            // going to first limit
-            if (toFirstPos && !limitOne.isPressed()) {
-                spindexMotor.setVelocity(700);
-            }
-            else {
-                spindexMotor.setVelocity(0);
-                toFirstPos = false;
-                spindexMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
 
 
 
-            if (gamepad1.a && !SpatulaInWay) {
-                SpindexPos += 48;
+            if (gamepad1.aWasPressed() && !spatulaInWay) {
+                if (launching) SpindexPos += 38;
+                else SpindexPos += 58;
                 spindexMotor.setTargetPosition(SpindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                spindexMotor.setVelocity(1400);
+                spindexMotor.setVelocity(50);
                 launching = !launching;
             }
 
 
             if (gamepad2.left_bumper) {
                 spatulaServo.setPosition(-1);
-                SpatulaInWay = false;
-            } else if (gamepad2.back && launching && spindexMotor.getVelocity() < 300) {
+                spatulaInWay = false;
+            } else if (gamepad2.right_bumper && launching && spindexMotor.getVelocity() < 300) {
                 spatulaServo.setPosition(1);
-                SpatulaInWay = true;
+                spatulaInWay = true;
             }
 
             if (gamepad2.back && launching && spindexMotor.getVelocity() < 300) {
                 spatulaServo.setPosition(1);
-                SpatulaInWay = true;
+                spatulaInWay = true;
                 isSleeping = true;
                 sleepCounter = 0;
             }
             if (isSleeping && sleepCounter >= 30) {
                 isSleeping = false;
                 spatulaServo.setPosition(-1);
-                SpatulaInWay = false;
+                spatulaInWay = false;
 
             }
             sleepCounter ++;
 
-            telemetry.addData("Spindexer speed", spindexMotor.getPower());
-            // telemetry.addData("Magnetic Switch 1 is letting servo run", limitCondition1);
+            telemetry.addData("Spindexer speed", spindexMotor.getVelocity());
+            telemetry.addData("Magnetic Switch is pressed", limitOne.isPressed());
+            telemetry.addData("SpatulaInWay", spatulaInWay);
+            telemetry.addData("Spindexer Position", spindexMotor.getCurrentPosition());
+            telemetry.addData("Spindexer Target Position", spindexMotor.getTargetPosition());
+
 
             // next line of telemetry needed in drive code:
             telemetry.addData("In launching position", launching);

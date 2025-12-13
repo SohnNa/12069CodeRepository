@@ -46,7 +46,7 @@ import java.util.List;
 @TeleOp(name = "v3BotTesting")
 //@Disabled
 public class v3BotTesting extends LinearOpMode {
-    private CRServo spindexServo;
+    int limitCount = 0;
 
 
     TouchSensor limitOne;
@@ -71,7 +71,7 @@ public class v3BotTesting extends LinearOpMode {
         limitOne = hardwareMap.get(TouchSensor.class, "limitOne");
         limitTwo = hardwareMap.get(TouchSensor.class, "limitTwo");
 
-        spindexServo = hardwareMap.get(CRServo.class, "spindexServo");
+
 
         DcMotorEx flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
 
@@ -79,7 +79,7 @@ public class v3BotTesting extends LinearOpMode {
 
         // Reversing the motors.
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        flywheel.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
 
 
@@ -167,14 +167,12 @@ public class v3BotTesting extends LinearOpMode {
                 flywheel.setVelocity(0);
             }
 
-
-            if (gamepad1.dpad_right) {
-                spindexServo.setPower(0.75);
-            } else if (gamepad1.dpad_left) {
-                spindexServo.setPower(-0.75);
-            } else {
-                spindexServo.setPower(0);
+            if (limitOne.isPressed() || limitTwo.isPressed()) {
+                limitCount += 1;
             }
+
+
+
 
             // Rotate the movement direction counter to the bot's rotation
             double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -201,6 +199,14 @@ public class v3BotTesting extends LinearOpMode {
             telemetry.addData("backRightVelocity", backRight.getVelocity());
             telemetry.addData("frontLeftVelocity", frontLeft.getVelocity());
             telemetry.addData("frontRightVelocity", frontRight.getVelocity());
+
+            telemetry.addData("Limitswitch1", limitOne.isPressed());
+
+            telemetry.addData("Limitswitch2", limitTwo.isPressed());
+
+            telemetry.addData("Limit Count", limitCount);
+
+
 
 
             telemetry.update();

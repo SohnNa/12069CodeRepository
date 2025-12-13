@@ -27,7 +27,6 @@ public class v3BotTeleOp extends LinearOpMode {
     double speed;
     TouchSensor limitOne;
     TouchSensor limitTwo;
-    DistanceSensor distance_1;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -52,7 +51,7 @@ public class v3BotTeleOp extends LinearOpMode {
         DcMotorEx turretMotor = hardwareMap.get(DcMotorEx.class, "turretMotor");
         DcMotorEx spindexMotor = hardwareMap.get(DcMotorEx.class, "spindexMotor");
 
-        Servo spatulaServo = hardwareMap.servo.get("servo_intake");
+        Servo spatulaServo = hardwareMap.servo.get("spatulaServo");
 
         ColorSensor colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
@@ -137,7 +136,7 @@ public class v3BotTeleOp extends LinearOpMode {
             } else {
                 flywheel.setVelocity(0);
             }
-            next_pos = (runtime.milliseconds() - prevTime) * turretMotor.getVelocity();
+            next_pos = (int) ((runtime.milliseconds() - prevTime) * turretMotor.getVelocity());
             if (gamepad1.left_bumper) {
                 //if () limits
                 turretMotor.setTargetPosition(next_pos);
@@ -190,9 +189,16 @@ public class v3BotTeleOp extends LinearOpMode {
             telemetry.addData("Turret Velocity", turretMotor.getVelocity());
             telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
             //Color Sensor Telemetry
+            //
+
+
+
+
             telemetry.addData("Red", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());
             telemetry.addData("Blue", colorSensor.blue());
+
+
 
             telemetry.update();
 
