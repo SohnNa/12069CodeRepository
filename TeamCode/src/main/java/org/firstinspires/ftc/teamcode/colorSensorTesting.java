@@ -40,6 +40,14 @@ public class colorSensorTesting extends LinearOpMode {
 
     double prevTime = 0.0;
 
+    int counter = 0;
+
+    String artifactOne;
+
+    String artifactTwo;
+
+    String artifactThree;
+
     int next_pos = 0;
 
 
@@ -107,21 +115,36 @@ public class colorSensorTesting extends LinearOpMode {
                 artifactStatus = "Purple Artifact";
             }
 
+            if (gamepad1.dpadRightWasPressed()) {
+                if (counter == 0) {
+                    artifactOne = artifactStatus;
+                    counter += 1;
+                } else if (counter == 1) {
+                    artifactTwo = artifactStatus;
+                    counter += 1;
+                } else if (counter == 2) {
+                    artifactThree = artifactStatus;
+                    counter = 0;
+                }
+            }
 
 
 
 
 
 
-            telemetry.addData("Turret Velocity", turretMotor.getVelocity());
-            telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
+
             telemetry.addData("Artifact Status", artifactStatus);
 
+
+            /*
             //Color Sensor Telemetry
             telemetry.addData("", "");
             telemetry.addData("Red", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());
             telemetry.addData("Blue", colorSensor.blue());
+
+             */
 
 
 
