@@ -32,7 +32,12 @@ public class colorSensorTesting extends LinearOpMode {
     double green = 0.0;
     double blue = 0.0;
     String artifactStatus = "";
+    int counter = 0;
+    String artifactOne;
 
+    String artifactTwo;
+
+    String artifactThree;
     TouchSensor limitOne;
     TouchSensor limitTwo;
 
@@ -40,13 +45,6 @@ public class colorSensorTesting extends LinearOpMode {
 
     double prevTime = 0.0;
 
-    int counter = 0;
-
-    String artifactOne;
-
-    String artifactTwo;
-
-    String artifactThree;
 
     int next_pos = 0;
 
