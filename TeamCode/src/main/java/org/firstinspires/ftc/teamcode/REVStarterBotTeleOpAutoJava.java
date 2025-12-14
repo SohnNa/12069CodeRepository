@@ -122,7 +122,7 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
       backRight.setPower(0);
       sleep(1000);
       flywheel.setVelocity(1800);
-      sleep(7500);
+      sleep(2000);
       servo.setPower(-1);
       sleep(3000);
       flywheel.setVelocity(0);
@@ -323,7 +323,7 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
         backRight.setPower(0);
         sleep(1000);
         flywheel.setVelocity(1800);
-        sleep(7500);
+        sleep(2000);
         servo.setPower(-1);
         sleep(3000);
         flywheel.setVelocity(0);
