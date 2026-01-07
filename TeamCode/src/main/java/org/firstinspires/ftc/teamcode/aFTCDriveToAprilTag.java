@@ -72,7 +72,7 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "AprilTagTeleOp", group = "Concept")
+@TeleOp(name = "AprilTagTeleOp", group = "competition")
 //@Disabled
 public class aFTCDriveToAprilTag extends LinearOpMode {
 
@@ -159,7 +159,7 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
         imu.initialize(parameters);
 
 
-        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         waitForStart();
         runtime.reset();
@@ -169,7 +169,7 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
 
             while (opModeIsActive()) {
 
-                telemetryAprilTag();
+                //telemetryAprilTag();
 
                 if (toFirstPos) {
                     if (!limitOne.isPressed()) {
@@ -217,15 +217,15 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
                 }
 
                 if (gamepad1.x) {
-                    flywheel.setVelocity(2000);
+                    flywheel.setVelocity(2200);
                 } else if (gamepad1.b) {
-                    flywheel.setVelocity(-1600);
+                    flywheel.setVelocity(-1500);
                 } else if (gamepad1.y) {
-                    flywheel.setVelocity(1600);
+                    flywheel.setVelocity(1500);
                 } else {
                     flywheel.setVelocity(0);
                 }
-
+                /*
                 next_pos += (int) ((runtime.milliseconds() - prevTime) * turretMotor.getVelocity());
                 if (gamepad1.left_bumper) {
                     //if (next_pos < limit) limits
@@ -237,6 +237,15 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
                     turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     turretMotor.setVelocity(-600);
                 }
+                */
+                if (gamepad1.left_bumper) {
+                    turretMotor.setVelocity(-250);
+                } else if (gamepad1.right_bumper) {
+                    turretMotor.setVelocity(250);
+                } else {
+                    turretMotor.setVelocity(0);
+                }
+
 
 
                 if (gamepad1.leftStickButtonWasPressed()) {
@@ -277,32 +286,37 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
                     SpindexPos += 96;
                     spindexMotor.setTargetPosition(SpindexPos);
                     spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    spindexMotor.setVelocity(100);
+                    spindexMotor.setVelocity(250);
                 } else if (gamepad1.dpadLeftWasPressed() && !toFirstPos && !spatulaInWay) {
                     // rotating between intake positions
                     SpindexPos -= 96;
                     spindexMotor.setTargetPosition(SpindexPos);
                     spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    spindexMotor.setVelocity(100);
+                    spindexMotor.setVelocity(250);
                 }
 
 
                 if (gamepad1.aWasPressed() && !spatulaInWay) {
-                    if (launching) SpindexPos += 38;
-                    else SpindexPos += 58;
+                    if (launching) SpindexPos += 28;
+                    else SpindexPos += 68;
                     spindexMotor.setTargetPosition(SpindexPos);
                     spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    spindexMotor.setVelocity(50);
+                    spindexMotor.setVelocity(250);
                     launching = !launching;
                 }
-
 
                 if (gamepad1.dpad_down) {
                     spatulaServo.setPosition(-1);
                     spatulaInWay = false;
-                } else if (gamepad1.dpad_up && launching && spindexMotor.getVelocity() < 300) {
+                    spindexMotor.setTargetPosition(SpindexPos);
+                    spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    spindexMotor.setVelocity(150);
+                } else if (gamepad1.dpadUpWasPressed() && launching && (spindexMotor.getVelocity() < 30) && (spindexMotor.getTargetPosition() >= spindexMotor.getCurrentPosition() - 5) && (spindexMotor.getTargetPosition() <= spindexMotor.getCurrentPosition() + 5)) {
                     spatulaServo.setPosition(1);
                     spatulaInWay = true;
+                    spindexMotor.setTargetPosition(SpindexPos);
+                    spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    spindexMotor.setPower(0);
                 }
 
 
@@ -340,12 +354,15 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
                 //telemetry.addData("Spindexer Position", spindexMotor.getCurrentPosition());
                 //telemetry.addData("Spindexer Target Position", spindexMotor.getTargetPosition());
                 telemetry.addData("In launching position", launching);
+                telemetry.addData("Not going to break",launching && (spindexMotor.getVelocity() < 20) && (spindexMotor.getTargetPosition() >= spindexMotor.getCurrentPosition() - 5) && (spindexMotor.getTargetPosition() <= spindexMotor.getCurrentPosition() + 5));
                 //Intake & Output motor Telemetry
                 //telemetry.addData("Turret Velocity", turretMotor.getVelocity());
                 //telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
                 telemetry.addData("Flywheel", flywheel.getVelocity());
                 //Color Sensor Telemetry
-                telemetry.addData("Artifact Status", artifactStatus);
+                //telemetry.addData("Artifact Status", artifactStatus);
+                //telemetry.addData("Spindexer Holdings: ", artifactOne + " " + artifactTwo + " " + artifactThree);
+
             /*
             telemetry.addData("Red", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());
@@ -406,7 +423,8 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
     /**
      * Add telemetry about AprilTag detections.
      */
-    private void telemetryAprilTag() {
+    private int telemetryAprilTag() {
+        int outputVelocity = 0;
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
@@ -414,6 +432,13 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
+//                if (gamepad1.right_stick_button) {
+//                    if (detection.ftcPose.x <= 0) outputVelocity = -250;
+//                    else if (detection.ftcPose.x <= ) outputVelocity = -250;
+//                    else if (detection.ftcPose.x <= ) outputVelocity = -250;
+//                    else if (detection.ftcPose.x <= ) outputVelocity = -250;
+//                }
+
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
                 //telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
@@ -426,9 +451,10 @@ public class aFTCDriveToAprilTag extends LinearOpMode {
 
         // Add "key" information to telemetry
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
-        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
-        telemetry.addLine("RBE = Range, Bearing & Elevation");
+        //telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
+        //telemetry.addLine("RBE = Range, Bearing & Elevation");
 
+        return outputVelocity;
     }   // end method telemetryAprilTag()
 
 }   // end class

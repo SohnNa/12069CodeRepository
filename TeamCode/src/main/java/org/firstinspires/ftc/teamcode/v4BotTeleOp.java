@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,26 +8,17 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import org.firstinspires.ftc.teamcode.Mechanisms.AprilTagWebcam;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@TeleOp(name = "v4BotTeleOp")
-@Disabled
+
+@TeleOp(name = "v4BotTeleOp", group = "competition")
+
 public class v4BotTeleOp extends LinearOpMode {
 
-    AprilTagWebcam aprilTagWebcam = new AprilTagWebcam();
     TouchSensor limitOne;
 
     TouchSensor limitTwo;
@@ -60,7 +48,7 @@ public class v4BotTeleOp extends LinearOpMode {
 
     boolean toFirstPos = true;
 
-    int SpindexPos = 0;
+    int spindexPos = 0;
 
 
 
@@ -91,7 +79,7 @@ public class v4BotTeleOp extends LinearOpMode {
         // Reversing the motors.
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        aprilTagWebcam.init(hardwareMap, telemetry);
+
 
         // Retrieve the IMU from the hardware map
         IMU imu = hardwareMap.get(IMU.class, "imu");
@@ -103,7 +91,7 @@ public class v4BotTeleOp extends LinearOpMode {
         imu.initialize(parameters);
 
 
-        turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
 
         waitForStart();
@@ -164,15 +152,15 @@ public class v4BotTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.x) {
-                flywheel.setVelocity(2000);
+                flywheel.setVelocity(1700);
             } else if (gamepad1.b) {
-                flywheel.setVelocity(-1600);
+                flywheel.setVelocity(-1500);
             } else if (gamepad1.y) {
-                flywheel.setVelocity(1600);
+                flywheel.setVelocity(1500);
             } else {
                 flywheel.setVelocity(0);
             }
-
+            /*
             next_pos += (int) ((runtime.milliseconds() - prevTime) * turretMotor.getVelocity());
             if (gamepad1.left_bumper) {
                 //if (next_pos < limit) limits
@@ -185,9 +173,28 @@ public class v4BotTeleOp extends LinearOpMode {
                 turretMotor.setVelocity(-600);
             }
 
+             */
+            /*
+            if (gamepad1.leftBumperWasPressed()) {
+                next_pos += 30;
+                turretMotor.setTargetPosition(next_pos);
+                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turretMotor.setVelocity(300);
+            } else if (gamepad1.rightBumperWasPressed()) {
+                next_pos -= 30;
+                turretMotor.setTargetPosition(next_pos);
+                turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turretMotor.setVelocity(600);
+            }
+            */
 
-            if (gamepad1.leftStickButtonWasPressed()) {
-                toFirstPos = true;
+
+
+            if (gamepad1.back) {
+                spindexMotor.setTargetPosition(0);
+                spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                spindexMotor.setVelocity(100);
+                spindexPos = 0;
             }
 
 
@@ -218,41 +225,43 @@ public class v4BotTeleOp extends LinearOpMode {
             double frontRightPower = (rotY - rotX - rx) / denominator;
             double backRightPower = (rotY + rotX - rx) / denominator;
 
-
             if (gamepad1.dpadRightWasPressed() && !toFirstPos && !spatulaInWay) {
                 // rotating between intake positions
-                SpindexPos += 96;
-                spindexMotor.setTargetPosition(SpindexPos);
+                spindexPos += 96;
+                spindexMotor.setTargetPosition(spindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                spindexMotor.setVelocity(100);
+                spindexMotor.setVelocity(250);
             } else if (gamepad1.dpadLeftWasPressed() && !toFirstPos && !spatulaInWay) {
                 // rotating between intake positions
-                SpindexPos -= 96;
-                spindexMotor.setTargetPosition(SpindexPos);
+                spindexPos -= 96;
+                spindexMotor.setTargetPosition(spindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                spindexMotor.setVelocity(100);
+                spindexMotor.setVelocity(250);
             }
 
 
             if (gamepad1.aWasPressed() && !spatulaInWay) {
-                if (launching) SpindexPos += 38;
-                else SpindexPos += 58;
-                spindexMotor.setTargetPosition(SpindexPos);
+                if (launching) spindexPos += 28;
+                else spindexPos += 68;
+                spindexMotor.setTargetPosition(spindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                spindexMotor.setVelocity(50);
+                spindexMotor.setVelocity(250);
                 launching = !launching;
             }
-
 
             if (gamepad1.dpad_down) {
                 spatulaServo.setPosition(-1);
                 spatulaInWay = false;
-            } else if (gamepad1.dpad_up && launching && spindexMotor.getVelocity() < 300) {
+
+            } else if (gamepad1.dpadUpWasPressed() && launching && (spindexMotor.getVelocity() < 30) && (spindexMotor.getTargetPosition() >= spindexMotor.getCurrentPosition() - 5) && (spindexMotor.getTargetPosition() <= spindexMotor.getCurrentPosition() + 5)) {
                 spatulaServo.setPosition(1);
                 spatulaInWay = true;
+                spindexMotor.setTargetPosition(spindexPos);
+                spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                spindexMotor.setPower(0);
             }
 
-
+            /*
             green = colorSensor.green();
             red = colorSensor.red();
             blue = colorSensor.blue();
@@ -278,6 +287,8 @@ public class v4BotTeleOp extends LinearOpMode {
                 }
             }
 
+             */
+
 
 
             /*
@@ -296,10 +307,6 @@ public class v4BotTeleOp extends LinearOpMode {
 
              */
 
-            aprilTagWebcam.update();
-            AprilTagDetection id20 = aprilTagWebcam.getTagsBySpecificId(20);
-            aprilTagWebcam.displayDetectionTelemetry(id20);
-
 
 
             //Spindexer Telemetry
@@ -314,7 +321,7 @@ public class v4BotTeleOp extends LinearOpMode {
             //telemetry.addData("Intake Velocity", intakeMotor.getVelocity());
             telemetry.addData("Flywheel", flywheel.getVelocity());
             //Color Sensor Telemetry
-            telemetry.addData("Artifact Status", artifactStatus);
+            //telemetry.addData("Spindexer Holdings: ", artifactOne + "" + artifactTwo + "" + artifactThree);
             /*
             telemetry.addData("Red", colorSensor.red());
             telemetry.addData("Green", colorSensor.green());

@@ -2,68 +2,87 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
-@TeleOp(name = "Autonomous Code(s)")
+@TeleOp(name = "Autonomous Code(s)", group = "competition")
 public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
 
   private DcMotorEx flywheel;
 
-  private DcMotor frontLeft;
-  private CRServo servo;
-  private DcMotor frontRight;
+  private DcMotorEx frontLeft;
+  private Servo spatulaServo;
+  private DcMotorEx frontRight;
 
-  private DcMotor backRight;
+  private DcMotorEx backRight;
 
-  private DcMotor backLeft;
+  private DcMotorEx backLeft;
 
-  private static final int bankVelocity = 1300;
-  private static final int farVelocity = 1900;
-  private static final int maxVelocity = 2200;
+  private DcMotorEx spindexMotor;
+
+  TouchSensor limitOne;
+  TouchSensor limitTwo;
+
   private static final String TELEOP = "RedBackwardsW/launcher";
   private static final String AUTO_BLUE = "DriveForward";
   private static final String AUTO_RED = " BlueBackwardsW/launcher";
   private String operationSelected = TELEOP;
-  private double WHEELS_INCHES_TO_TICKS = (28 * 5 * 3) / (3 * Math.PI);
-  private ElapsedTime autoLaunchTimer = new ElapsedTime();
-  private ElapsedTime autoDriveTimer = new ElapsedTime();
+
+  boolean launching = false;
+
+  boolean spatulaInWay = false;
+
+  int sleepCounter = 0;
+  boolean isSleeping = false;
+
+  boolean toFirstPos = true;
+
+  int SpindexPos = 0;
 
   @Override
   public void runOpMode() {
     flywheel = hardwareMap.get(DcMotorEx.class, "flywheel");
 
-    frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-    servo = hardwareMap.get(CRServo.class, "servo");
-    frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-    backLeft = hardwareMap.get(DcMotor.class,"backLeft");
-    backRight = hardwareMap.get(DcMotor.class,"backRight");
-    
+    frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+    frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+    backLeft = hardwareMap.get(DcMotorEx.class,"backLeft");
+    backRight = hardwareMap.get(DcMotorEx.class,"backRight");
+
+    spindexMotor = hardwareMap.get(DcMotorEx.class, "spindexMotor");
+    limitOne = hardwareMap.get(TouchSensor.class, "limitOne");
+    spatulaServo = hardwareMap.get(Servo.class, "spatulaServo");
+
   // Establishing the direction and mode for the motors
-    flywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     frontLeft.setDirection(DcMotor.Direction.REVERSE);
-    backLeft.setDirection(DcMotor.Direction.REVERSE);
-    frontRight.setDirection(DcMotor.Direction.REVERSE);
 
-    //Ensures the servo is active and ready
-    servo.setPower(0);
+    //Ensures the servo is not in the way of the spindexer.
+    spatulaServo.setPosition(-1);
 
-  //On initilization the Driver Station will prompt for which OpMode should be run - Auto Blue, Auto Red, or TeleOp
+  //On initilization the Driver Station will prompt for which OpMode should be run - Auto Blue, Auto Red, or DriveForward
     while (opModeInInit()) {
       operationSelected = selectOperation(operationSelected, gamepad1.guide);
       telemetry.update();
-      servo.setPower(1);
+
+      if (toFirstPos) {
+        if (!limitOne.isPressed()) {
+          spindexMotor.setVelocity(25);
+        } else {
+          spindexMotor.setVelocity(0);
+          toFirstPos = false;
+          spindexMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+      }
     }
+
     waitForStart();
     if (operationSelected.equals(AUTO_BLUE)) {
-      doAutoBlue();
+      doDriveForward();
     } else if (operationSelected.equals(AUTO_RED)) {
-      doAutoRed();
+      doBlueAuto();
     } else {
-      doTeleOp();
+      doRedAuto();
     }
   }
 
@@ -97,147 +116,64 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
   /**
    * If TeleOp was selected or defaulted to, the following will be active upon pressing "play".
    */
-  private void doTeleOp() {
+  private void doRedAuto() {
+    int spindexPos = 0;
+    // do we need this below?
+    waitForStart();
+
     if (opModeIsActive()) {
-      /*
-      while (opModeIsActive()) {
-        // Calling our methods while the OpMode is running
-        splitStickArcadeDrive();
-        setFlywheelVelocity();
-        manualCoreHexAndServoControl();
-        telemetry.addData("Flywheel Velocity", ((DcMotorEx) flywheel).getVelocity());
-        telemetry.addData("Flywheel Power", flywheel.getPower());
-        telemetry.update();
-      }
-
-       */
-      frontLeft.setPower(-0.4);
-      frontRight.setPower(-0.4);
-      backLeft.setPower(-0.4);
-      backRight.setPower(-0.4);
-      sleep(1000);
-      frontLeft.setPower(0);
-      frontRight.setPower(0);
-      backLeft.setPower(0);
-      backRight.setPower(0);
-      sleep(1000);
-      flywheel.setVelocity(1800);
+      //RedAuto
+      spindexMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      frontLeft.setTargetPosition(100);
+      backLeft.setTargetPosition(100);
+      frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      frontLeft.setVelocity(400);
+      backLeft.setVelocity(400);
+      frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      frontLeft.setVelocity(0);
+      backLeft.setVelocity(0);
       sleep(2000);
-      servo.setPower(-1);
-      sleep(3000);
-      flywheel.setVelocity(0);
-      frontLeft.setPower(-0.2);
-      frontRight.setPower(0.2);
-      backLeft.setPower(-0.2);
-      backRight.setPower(0.2);
-      sleep(1000);
-      frontLeft.setPower(0);
-      frontRight.setPower(0);
-      backLeft.setPower(0);
-      backRight.setPower(0);
-      sleep(1000);
-      frontLeft.setPower(-0.4);
-      frontRight.setPower(-0.4);
-      backLeft.setPower(-0.4);
-      backRight.setPower(-0.4);
-      sleep(1000);
-      frontLeft.setPower(0);
-      frontRight.setPower(0);
-      backLeft.setPower(0);
-      backRight.setPower(0);
 
+      //  check if speed is right
+      flywheel.setVelocity(1700);
 
+      spindexPos += 68;
+      spindexMotor.setTargetPosition(spindexPos);
+      spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      spindexMotor.setVelocity(250);
 
-
-
-    }
-  }
-  
-    /**
-   * Controls for the drivetrain. The robot uses a split stick stlye arcade drive. 
-   * Forward and back is on the left stick. Turning is on the right stick.
-   */
-  private void splitStickArcadeDrive() {
-    float X;
-    float Y;
-
-    X = gamepad1.right_stick_x;
-    Y = -gamepad1.left_stick_y;
-    frontLeft.setPower(Y - X);
-    frontRight.setPower(Y + X);
-  }
-  
-    /**
-   * Manual control for the Core Hex powered feeder and the agitator servo in the hopper
-   */
-  private void manualCoreHexAndServoControl() {
-    // Manual control for the Core Hex intake
-
-    // Manual control for the hopper's servo
-    if (gamepad1.dpad_left) {
-      servo.setPower(1);
-    } else if (gamepad1.dpad_right) {
-      servo.setPower(-1);
-    }
-  }
-  
-    /**
-   * This if/else statement contains the controls for the flywheel, both manual and auto.
-   * Circle and Square will spin up ONLY the flywheel to the target velocity set.
-   * The bumpers will activate the flywheel, Core Hex feeder, and servo to cycle a series of balls.
-   */
-  private void setFlywheelVelocity() {
-    if (gamepad1.back) {
-      flywheel.setPower(-0.5);
-    } else if (gamepad1.left_bumper) {
-      FAR_POWER_AUTO();
-    } else if (gamepad1.right_bumper) {
-      BANK_SHOT_AUTO();
-    } else if (gamepad1.b) {
-      ((DcMotorEx) flywheel).setVelocity(bankVelocity);
-    } else if (gamepad1.a) {
-      ((DcMotorEx) flywheel).setVelocity(maxVelocity);
-    } else {
-      ((DcMotorEx) flywheel).setVelocity(0);
-
-      // The check below is in place to prevent stuttering with the servo. It checks if the servo is under manual control!
-      if (!gamepad1.dpad_right && !gamepad1.dpad_left) {
-        servo.setPower(0);
+      while (!((spindexMotor.getVelocity() < 30) && (spindexMotor.getTargetPosition() >= spindexMotor.getCurrentPosition() - 5) && (spindexMotor.getTargetPosition() <= spindexMotor.getCurrentPosition() + 5))) {
+        sleep(100);
       }
-    }
-  }
+      // if ((spindexMotor.getVelocity() < 30) && (spindexMotor.getTargetPosition() >= spindexMotor.getCurrentPosition() - 5) && (spindexMotor.getTargetPosition() <= spindexMotor.getCurrentPosition() + 5)) {
+      int i = 0;
+      while (i < 3) {
+        spatulaServo.setPosition(1);
+        sleep(1000);
+        spatulaServo.setPosition(-1);
+        sleep(1000);
+        spindexPos += 96;
+        spindexMotor.setTargetPosition(spindexPos);
+        spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        spindexMotor.setVelocity(250);
+        i++;
+        sleep(1000);
 
-//Automatic Flywheel controls used in Auto and TeleOp 
+      }
+      flywheel.setVelocity(0);
 
-  /**
-   * The bank shot or near velocity is intended for launching balls touching or a few inches from the goal.
-   * When running this function, the flywheel will spin up and the Core Hex will wait before balls can be fed.
-   * The servo will spin until the bumper is released.
-   */
-  private void BANK_SHOT_AUTO() {
-    ((DcMotorEx) flywheel).setVelocity(bankVelocity);
-    servo.setPower(-1);
-    if (((DcMotorEx) flywheel).getVelocity() >= bankVelocity - 100) {
 
-    } else {
 
-    }
-  }
 
-  /**
-   * The far power velocity is intended for launching balls a few feet from the goal. It may require adjusting the deflector.
-   * When running this function, the flywheel will spin up and the Core Hex will wait before balls can be fed.
-   * The servo will spin until the bumper is released.
-   */
-  private void FAR_POWER_AUTO() {
-    ((DcMotorEx) flywheel).setVelocity(farVelocity);
-    servo.setPower(-1);
-    if (((DcMotorEx) flywheel).getVelocity() >= farVelocity - 100) {
 
-    } else {
 
     }
   }
+
+
+
 
 //Autonomous Code
 //For autonomous, the robot will launch the pre-loaded 3 balls then back away from the goal, turn, and back up off the launch line.
@@ -247,55 +183,24 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
    * This method contains the math to be used with the inputted distance for the encoders, resets the elapsed timer, and
    * provides a check for it to run so long as the motors are busy and the timer has not run out. 
    */
-  private void autoDrive(double speed, int leftDistanceInch, int rightDistanceInch, int timeout_ms) {
-    autoDriveTimer.reset();
-    frontLeft.setTargetPosition((int) (frontLeft.getCurrentPosition() + leftDistanceInch * WHEELS_INCHES_TO_TICKS));
-    frontRight.setTargetPosition((int) (frontRight.getCurrentPosition() + rightDistanceInch * WHEELS_INCHES_TO_TICKS));
-    frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    frontLeft.setPower(Math.abs(speed));
-    frontRight.setPower(Math.abs(speed));
-    while (opModeIsActive() && (frontLeft.isBusy() || frontRight.isBusy()) && autoDriveTimer.milliseconds() < timeout_ms) {
-      idle();
-    }
-    frontLeft.setPower(0);
-    frontRight.setPower(0);
-    frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-  }
+
 
   /**
    * Blue Alliance Autonomous
    * The robot will fire the pre-loaded balls until the 10 second timer ends. 
    * Then it will back away from the goal and off the launch line.
    */
-
-
-  private void doAutoBlue
+  private void doDriveForward
   () {
     if (opModeIsActive()) {
       telemetry.addData("RUNNING OPMODE", operationSelected);
       telemetry.update();
-      // Fire balls
-      //autoLaunchTimer.reset();
-      //while (opModeIsActive() && autoLaunchTimer.milliseconds() < 10000) {
-        //BANK_SHOT_AUTO();
-        //telemetry.addData("Launcher Countdown", autoLaunchTimer.seconds());
-        //telemetry.update();
-      //}
-      //((DcMotorEx) flywheel).setVelocity(0);
-
-      //servo.setPower(0);
-      // Back Up
-      //autoDrive(0.5, -12, -12, 5000);
-      // Turn
-      //autoDrive(0.5, -8, 8, 5000);
-      // Drive off Line
+      //Drive Forward.
       frontLeft.setPower(0.4);
-      frontRight.setPower(0.4);
-      backLeft.setPower(0.4);
+      frontRight.setPower(-0.4);
+      backLeft.setPower(-0.4);
       backRight.setPower(0.4);
-      sleep(1000);
+      sleep(2000);
       frontLeft.setPower(0);
       frontRight.setPower(0);
       backLeft.setPower(0);
@@ -308,46 +213,46 @@ public class REVStarterBotTeleOpAutoJava extends LinearOpMode {
    * The robot will fire the pre-loaded balls until the 10 second timer ends. 
    * Then it will back away from the goal and off the launch line.
    */
-  private void doAutoRed() {
+  private void doBlueAuto() {
     if (opModeIsActive()) {
       telemetry.addData("RUNNING OPMODE", operationSelected);
       telemetry.update();
+
+      //Blue Auto
+      frontLeft.setPower(-0.4);
+      frontRight.setPower(-0.4);
+      backLeft.setPower(-0.4);
+      backRight.setPower(-0.4);
+      sleep(2000);
+      frontLeft.setPower(0);
+      frontRight.setPower(0);
+      backLeft.setPower(0);
+      backRight.setPower(0);
+      sleep(1000);
+      SpindexPos += 68;
+      spindexMotor.setTargetPosition(SpindexPos);
+      spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      spindexMotor.setVelocity(250);
+      sleep(1000);
+      flywheel.setVelocity(1600);
+      sleep(1000);
+      if ((gamepad1.dpadUpWasPressed() && (spindexMotor.getVelocity() < 30) && (spindexMotor.getTargetPosition() >= spindexMotor.getCurrentPosition() - 5) && (spindexMotor.getTargetPosition() <= spindexMotor.getCurrentPosition() + 5))) {
+        spatulaServo.setPosition(1);
+        sleep(1000);
         frontLeft.setPower(-0.4);
-        frontRight.setPower(-0.4);
+        frontRight.setPower(0.4);
         backLeft.setPower(-0.4);
-        backRight.setPower(-0.4);
-        sleep(1000);
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-        sleep(1000);
-        flywheel.setVelocity(1800);
+        backRight.setPower(0.4);
         sleep(2000);
-        servo.setPower(-1);
-        sleep(3000);
-        flywheel.setVelocity(0);
-        frontLeft.setPower(0.2);
-        frontRight.setPower(-0.2);
-        backLeft.setPower(0.2);
-        backRight.setPower(-0.2);
-        sleep(1000);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
-        sleep(1000);
-        frontLeft.setPower(-0.4);
-        frontRight.setPower(-0.4);
-        backLeft.setPower(-0.4);
-        backRight.setPower(-0.4);
-        sleep(1000);
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
+      }
     }
   }
 }
+
+
 
 

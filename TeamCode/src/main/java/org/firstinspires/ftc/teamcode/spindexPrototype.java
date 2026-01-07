@@ -78,37 +78,7 @@ public class spindexPrototype extends LinearOpMode {
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 spindexMotor.setVelocity(100);
             }
-            /*
-            if (launching || limitCondition1) spindexServo.setPower(0.1);
-            //else if () spindexServo.setPower(0.75);
-            else spindexServo.setPower(0);
 
-            // if the limit switch is not pressed or an input is forcing it to run, then spin the spindexer
-            if (!wantToLaunch && (!limitOne.isPressed() || forceRun)) {
-                limitCondition1 = true;
-                // potential issue in it wanting to go but launching preventing that, but wait to go off limit switch should fix it
-                running = true;
-            }
-            else limitCondition1 = false;
-
-            // waiting until outside the limit switch, then letting it stop when it hits a switch again
-            if (running && !limitOne.isPressed()) {
-                running = false;
-                forceRun = false;
-            }
-
-            // same thing but for the launching position
-            if (wantToLaunch && !limitTwo.isPressed()) {
-                launching = true;
-                // runningTwo = true;
-            }
-            else launching = false;
-
-            if (runningTwo && !limitTwo.isPressed()) {
-                runningTwo = false;
-                toLaunch = false;
-            }
-            */
 
 
 
@@ -158,3 +128,34 @@ public class spindexPrototype extends LinearOpMode {
         }
     }
 }
+/*
+            if (launching || limitCondition1) spindexServo.setPower(0.1);
+            //else if () spindexServo.setPower(0.75);
+            else spindexServo.setPower(0);
+
+            // if the limit switch is not pressed or an input is forcing it to run, then spin the spindexer
+            if (!wantToLaunch && (!limitOne.isPressed() || forceRun)) {
+                limitCondition1 = true;
+                // potential issue in it wanting to go but launching preventing that, but wait to go off limit switch should fix it
+                running = true;
+            }
+            else limitCondition1 = false;
+
+            // waiting until outside the limit switch, then letting it stop when it hits a switch again
+            if (running && !limitOne.isPressed()) {
+                running = false;
+                forceRun = false;
+            }
+
+            // same thing but for the launching position
+            if (wantToLaunch && !limitTwo.isPressed()) {
+                launching = true;
+                // runningTwo = true;
+            }
+            else launching = false;
+
+            if (runningTwo && !limitTwo.isPressed()) {
+                runningTwo = false;
+                toLaunch = false;
+            }
+            */
