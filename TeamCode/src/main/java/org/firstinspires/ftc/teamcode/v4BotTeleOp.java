@@ -191,10 +191,11 @@ public class v4BotTeleOp extends LinearOpMode {
 
 
             if (gamepad1.back) {
-                spindexMotor.setTargetPosition(0);
+                spindexPos = spindexPos-(spindexPos % 288);
+                spindexMotor.setTargetPosition(spindexPos);
                 spindexMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 spindexMotor.setVelocity(100);
-                spindexPos = 0;
+                launching = false;
             }
 
 
